@@ -8,9 +8,12 @@ Place FundingSchema.xsd into Debug folder
 
 ****REQUIRED DLLS****
 
+###I updated it with the visual studio I have at home so hopefully you can just connect and pull directly for it to work now
+
 
 ExcelDataReader + DataSet
 https://www.nuget.org/packages/ExcelDataReader/3.5.0
+
 https://www.nuget.org/packages/ExcelDataReader.DataSet/3.5.0
 
 LINQtoCSV
