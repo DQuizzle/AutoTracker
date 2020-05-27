@@ -10,6 +10,7 @@ Place FundingSchema.xsd into Debug folder
 
 ###I updated it with the visual studio I have at home so hopefully you can just connect and pull directly for it to work now
 
+###If it doesn't work, right click the solution and use Manage NuGet packages to install the packages below'
 
 ExcelDataReader + DataSet
 https://www.nuget.org/packages/ExcelDataReader/3.5.0
