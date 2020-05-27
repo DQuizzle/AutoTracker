@@ -129,10 +129,14 @@
     </Compile>
     <None Include="FundingSchema.xsc">
       <DependentUpon>FundingSchema.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="FundingSchema.xsd" />
+    <None Include="FundingSchema.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="FundingSchema.xss">
       <DependentUpon>FundingSchema.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
