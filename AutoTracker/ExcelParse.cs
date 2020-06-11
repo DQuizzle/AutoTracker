@@ -118,7 +118,7 @@ namespace AutoTracker
                 progTables.Rows.Add(new object[] { prog.ID, prog.WBS_ID, prog.ProgramTitle });
 
             foreach (var umd in UMDs)
-                umdtables.Rows.Add(new object[] { umd.ID, umd.mapped_ASUID, umd.LRMK, umd.Grade, umd.Series, umd.Name, umd.MPCN, umd.isExecuted });
+                umdtables.Rows.Add(new object[] { umd.ID, umd.mapped_ASUID, umd.LRMK, umd.Grade, umd.Series, umd.Name, umd.MPCN });
 
             foreach (var req in reqsTable)
                 reqstables.Rows.Add(new object[] { req.ID, req.mapped_progID, req.progName, req.LRMK, req.name, req.totalReqs, req.EN, req.LG, req.PK, req.IN, req.FM, req.PM });
@@ -345,7 +345,7 @@ namespace AutoTracker
                                 progID = newProg.ID;
                             }
                             
-                            UMDTable umdWBS = new UMDTable(progID, LRMK, grade, series, name, mpcn, false);
+                            UMDTable umdWBS = new UMDTable(progID, LRMK, grade, series, name, mpcn);
                             UMDs.Add(umdWBS);
                         }
                     }
