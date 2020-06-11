@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Security.Cryptography;
+
 namespace AutoTracker.Tables
 {
     class ProgTable
@@ -17,10 +19,21 @@ namespace AutoTracker.Tables
         #region Constructor
         public ProgTable(string WBS_ID, string ProgramTitle)
         {
-            this.ID = Guid.NewGuid();
+            this.ID = Hash(ProgramTitle);
             this.WBS_ID = WBS_ID;
             this.ProgramTitle = ProgramTitle;
         }
         #endregion
+
+        public Guid Hash(string progTitle)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(progTitle);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                return new Guid(hashBytes);
+            }
+        }
     }
 }
