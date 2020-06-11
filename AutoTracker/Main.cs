@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AutoTracker.Properties;
+
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using Microsoft.Office.Core;
 
 namespace AutoTracker
 {
@@ -53,6 +58,8 @@ namespace AutoTracker
                 
                 asuEditBox.Visible = true;
                 deselectBtn.Enabled = true;
+                exportBtn.Enabled = true;
+                exportToolStripMenuItem.Enabled = true;
                 umdGRB.Visible = false;
             }
         }
@@ -139,6 +146,37 @@ namespace AutoTracker
         {
             dataGridView3.ClearSelection();
         }
+
+        private void SetTitle(string path)
+        {
+            this.Text = "ASU Presenter - " + Path.GetFileNameWithoutExtension(path);
+        }
+
+        private void checkSave(string msg)
+        {
+            if (saveBtn.Enabled == true)
+            {
+                DialogResult result = MessageBox.Show(msg, "Save Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                if (result == DialogResult.Yes)
+                {
+                    ExcelParse.WriteXML(saveFile);
+
+                    if (msg == "Do you want to save ALL changes before closing program?")
+                        Environment.Exit(0);
+
+                    saveBtn.Enabled = false;
+                    saveToolStripMenuItem.Enabled = false;
+
+                    SetTitle(saveFile);
+                }
+                else if (result == DialogResult.No)
+                {
+                    if (msg == "Do you want to save ALL changes before closing program?")
+                        Environment.Exit(0);
+                }
+            }
+        }
         #endregion
 
         #region Cell Color Formatting Methods
@@ -183,7 +221,8 @@ namespace AutoTracker
             {
                 if (row != null)
                 {
-                    if (Convert.ToString(row.Cells["gradeDataGridViewTextBoxColumn"].Value).Contains("GS") || Convert.ToString(row.Cells["gradeDataGridViewTextBoxColumn"].Value).Contains("NH"))
+                    if (Convert.ToString(row.Cells["gradeDataGridViewTextBoxColumn"].Value).Contains("GS") || Convert.ToString(row.Cells["gradeDataGridViewTextBoxColumn"].Value).Contains("NH")
+                        || Convert.ToString(row.Cells["gradeDataGridViewTextBoxColumn"].Value).Contains("CME"))
                     {
                         row.DefaultCellStyle.BackColor = Color.LightGreen;
                     }
@@ -217,16 +256,7 @@ namespace AutoTracker
         #region Tool Strip Menu Methods
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to save ALL changes?", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-            if (result == DialogResult.Yes)
-            {
-                ExcelParse.WriteXML(saveFile);
-                saveBtn.Enabled = false;
-                saveToolStripMenuItem.Enabled = false;
-            }
-            else
-                return;
+            checkSave("Are you sure you want to save ALL changes?");
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
@@ -238,9 +268,10 @@ namespace AutoTracker
                 loaded = true;
                 FormsVisible(true);
                 saveFile = ExcelParse.XMLPath;
-            }
 
-            RefreshData();
+                SetTitle(saveFile);
+                RefreshData();
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -249,6 +280,8 @@ namespace AutoTracker
             dialog.Filter = "XML (*.xml)|*.xml";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+                checkSave("Would you like the save ALL changes?");
+
                 DataSet newSet = new DataSet();
                 try
                 {
@@ -259,6 +292,9 @@ namespace AutoTracker
                     FormsVisible(true);
                     ExcelParse.XMLPath = dialog.FileName;
                     saveFile = dialog.FileName;
+
+                    SetTitle(saveFile);
+                    RefreshData();
                 }
                 catch (Exception ex)
                 {
@@ -266,30 +302,11 @@ namespace AutoTracker
                     return;
                 }
             }
-
-            RefreshData();
         }
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (saveBtn.Enabled == true)
-            {
-                DialogResult result = MessageBox.Show("Do you want to save ALL changes before closing program?", "Save Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                if (result == DialogResult.Yes)
-                {
-                    ExcelParse.WriteXML(saveFile);
-                    saveBtn.Enabled = false;
-                    saveToolStripMenuItem.Enabled = false;
-                    Close();
-                }
-                else if (result == DialogResult.No)
-                    Close();
-                else
-                    return;
-            }
-
-            Close();
+            checkSave("Do you want to save ALL changes before closing program?");
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -300,33 +317,15 @@ namespace AutoTracker
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to save ALL changes?", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-            if (result == DialogResult.Yes)
-            {
-                ExcelParse.WriteXML(saveFile);
-                saveBtn.Enabled = false;
-                saveToolStripMenuItem.Enabled = false;
-            }
-            else
-                return;
+            checkSave("Are you sure you want to save ALL changes?");
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (saveBtn.Enabled == true)
-            {
-                DialogResult result = MessageBox.Show("Do you want to save ALL changes before closing program?", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-
-                if (result == DialogResult.Yes)
-                {
-                    ExcelParse.WriteXML(saveFile);
-                    saveBtn.Enabled = false;
-                    saveToolStripMenuItem.Enabled = false;
-                }
-                else
-                    return;
-            }
+            if (e.CloseReason == CloseReason.UserClosing)
+                checkSave("Do you want to save ALL changes before closing program?");     
+            else
+                e.Cancel = true;
         }
         #endregion
 
@@ -465,7 +464,6 @@ namespace AutoTracker
 
             foreach (DataRow dr in drSelected)
             {
-                ID = dr["ID"].ToString();
                 name = dr["Name"].ToString();
                 MPCN = dr["MPCN"].ToString();
                 drExecList = dtExec.Select("MPCN='" + MPCN + "'");
@@ -486,19 +484,15 @@ namespace AutoTracker
         public void DeleteExecRow(DataRow drExec)
         {
             DataTable dtExec = ExcelParse.MainDataSet.Tables["ExecuteTable"];
-            DataRow[] drExecList = dtExec.Select("MPCN='" + drExec["MPCN"] + "'");
+            DataRow[] drExecList = dtExec.Select("MPCN='" + drExec["MPCN"] + "' AND PROG_ID='" + drExec["PROG_ID"] + "'");
 
             DataTable dtUMDExec = ExcelParse.MainDataSet.Tables["UMDTable"];
-            DataRow[] drUMDExecList = dtUMDExec.Select("MPCN='" + drExec["MPCN"] + "'");
+            DataRow[] drUMDExecList = dtUMDExec.Select("MPCN='" + drExec["MPCN"] + "' AND PROG_ID='" + drExec["PROG_ID"] + "'");
 
             foreach (DataRow drExecPerson in drExecList)
             {
                 drExecPerson.Delete();
             }
-
-            foreach (DataRow drUMDExec in drUMDExecList)
-                drUMDExec["isExecuted"] = false;
-
 
             drExec.Delete();
         }
@@ -520,10 +514,13 @@ namespace AutoTracker
                 DataTable dt = ExcelParse.MainDataSet.Tables["UMDTable"];
                 DataRow[] drMPCNChk = dt.Select("MPCN='" + mpcn_Txt.Text + "'");
 
-                if (drMPCNChk.Length > 0)
+                if (noMPCNChk.Checked == false)
                 {
-                    MessageBox.Show("MPCN already exists.", "Existing MPCN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    if (drMPCNChk.Length > 0)
+                    {
+                        MessageBox.Show("MPCN already exists.", "Existing MPCN", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
                 else
                 {
@@ -688,62 +685,56 @@ namespace AutoTracker
             dataGridView1.Refresh();
         }
 
+        private void addExecTable(object reqProgID, DataTable newExecDt, DataRow[] drMPCNChk, string programName)
+        {
+            DataRow newRow = newExecDt.NewRow();
+
+            newRow["PROG_ID"] = reqProgID;
+            newRow["LRMK_ID"] = drMPCNChk[0].ItemArray[2];
+            newRow["Grade"] = drMPCNChk[0].ItemArray[3];
+            newRow["Series"] = drMPCNChk[0].ItemArray[4];
+            newRow["Name"] = drMPCNChk[0].ItemArray[5];
+            newRow["MPCN"] = drMPCNChk[0].ItemArray[6];
+            newRow["ProgramName"] = programName;
+
+            newExecDt.Rows.Add(newRow);
+
+            saveBtn.Enabled = true;
+            saveToolStripMenuItem.Enabled = true;
+            updateUMDBtn.Enabled = false;
+        }
+
         private void exec_AddBtn_Click(object sender, EventArgs e)
         {
-            string reqProgID;
-
-            if (dataGridView2.CurrentRow != null)
-            {
-                int i = dataGridView2.CurrentRow.Index;
-                reqProgID = dataGridView2.Rows[i].Cells[3].Value.ToString();
-            }
-            else
-                reqProgID = null;
-
+            var reqProgID = comboBox2.SelectedValue;
 
             DataTable dt = ExcelParse.MainDataSet.Tables["UMDTable"];
             DataRow[] drMPCNChk = dt.Select("MPCN='" + execMPCN.Text + "'");
-
-            if (reqProgID == null)
-            {
-                int i = dataGridView1.CurrentRow.Index;
-                reqProgID = dataGridView1.Rows[i].Cells[8].Value.ToString();
-            }
 
             DataTable newExecDt = ExcelParse.MainDataSet.Tables["ExecuteTable"];
             DataRow[] drExecIDChk = newExecDt.Select("MPCN='" + execMPCN.Text + "'");
 
             if (drExecIDChk.Length > 0)
             {
-                MessageBox.Show(exec_NameBox.Text + " already assigned to a different program.", "Existing Person", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                drExecIDChk = newExecDt.Select("MPCN='" + execMPCN.Text + "' AND PROG_ID='" + reqProgID + "'");
+
+                if (drExecIDChk.Length > 0)
+                {
+                    MessageBox.Show(exec_NameBox.Text + " already assigned to this program.", "Existing Person", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                    addExecTable(reqProgID, newExecDt, drMPCNChk, comboBox2.Text);
             }
             else
             {
-                DataRow newRow = newExecDt.NewRow();
-
-                newRow["ID"] = Guid.NewGuid();
-                newRow["PROG_ID"] = reqProgID;
-                newRow["LRMK_ID"] = drMPCNChk[0].ItemArray[2];
-                newRow["Grade"] = drMPCNChk[0].ItemArray[3];
-                newRow["Series"] = drMPCNChk[0].ItemArray[4];
-                newRow["Name"] = drMPCNChk[0].ItemArray[5];
-                newRow["MPCN"] = drMPCNChk[0].ItemArray[6];
-
-                foreach (DataRow row in drMPCNChk)
-                    row["isExecuted"] = true;
-
-                newExecDt.Rows.Add(newRow);
-
-                saveBtn.Enabled = true;
-                saveToolStripMenuItem.Enabled = true;
-                updateUMDBtn.Enabled = false;
+                addExecTable(reqProgID, newExecDt, drMPCNChk, comboBox2.Text);
             }
         }
 
         private void addExecuteBtn_Click(object sender, EventArgs e)
         {
-            string reqProgID;
+            string progID, progName;
 
             DataTable selectProgram = ExcelParse.MainDataSet.Tables["ProgTable"];
             DataRow[] drSelectProgram = selectProgram.Select("ID='" + umdProgs.SelectedValue.ToString() + "'");
@@ -751,34 +742,28 @@ namespace AutoTracker
             DataTable dt = ExcelParse.MainDataSet.Tables["UMDTable"];
             DataRow[] drMPCNChk = dt.Select("MPCN='" + mpcn_Txt.Text + "'");
 
+            if (useCurrentProg.Checked == true)
+            {
+                progID = comboBox2.SelectedValue.ToString();
+                progName = comboBox2.Text;
+            }
+            else
+            {
+                progID = drSelectProgram[0].ItemArray[0].ToString();
+                progName = drSelectProgram[0].ItemArray[2].ToString();
+            }
+
             DataTable newExecDt = ExcelParse.MainDataSet.Tables["ExecuteTable"];
-            DataRow[] drExecIDChk = newExecDt.Select("MPCN='" + mpcn_Txt.Text + "'");
+            DataRow[] drExecIDChk = newExecDt.Select("MPCN='" + mpcn_Txt.Text + "' AND PROG_ID='" + progID + "'");
 
             if (drExecIDChk.Length > 0)
             {
-                MessageBox.Show(exec_NameBox.Text + " already assigned to a different program.", "Existing Person", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(umdName.Text + " already assigned to this program.", "Existing Person", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else
             {
-                DataRow newRow = newExecDt.NewRow();
-
-                newRow["ID"] = Guid.NewGuid();
-                newRow["PROG_ID"] = drSelectProgram[0].ItemArray[0];
-                newRow["LRMK_ID"] = drMPCNChk[0].ItemArray[2];
-                newRow["Grade"] = drMPCNChk[0].ItemArray[3];
-                newRow["Series"] = drMPCNChk[0].ItemArray[4];
-                newRow["Name"] = drMPCNChk[0].ItemArray[5];
-                newRow["MPCN"] = drMPCNChk[0].ItemArray[6];
-
-                foreach (DataRow row in drMPCNChk)
-                    row["isExecuted"] = true;
-
-                newExecDt.Rows.Add(newRow);
-
-                saveBtn.Enabled = true;
-                saveToolStripMenuItem.Enabled = true;
-                updateUMDBtn.Enabled = false;
+                addExecTable(progID, newExecDt, drMPCNChk, progName);
             }
         }
         #endregion
@@ -831,6 +816,19 @@ namespace AutoTracker
         #endregion
 
         #region TextBox Validation Methods
+        private void useCurrentProg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (useCurrentProg.Checked == true)
+            {
+                umdWBS.Enabled = false;
+                umdProgs.Enabled = false;
+            }
+            else
+            {
+                umdWBS.Enabled = true;
+                umdProgs.Enabled = true;
+            }
+        }
         private void gradeTxt_KeyDown(object sender, KeyEventArgs e)
         {
             updateUMDBtn.Enabled = true;
@@ -930,5 +928,307 @@ namespace AutoTracker
             umdGRB.Visible = true;
         }
         #endregion
-    }
+
+        #region Generate PowerPoint
+        private void PowerPoint(string path)
+        {
+            PowerPoint.Application pptApplication = new PowerPoint.Application();
+
+            PowerPoint.Slides slides;
+            PowerPoint._Slide slide_First;
+            PowerPoint._Slide slide_Second;
+            
+            //Create the Presentation File
+            PowerPoint.Presentation pptPresentation = pptApplication.Presentations.Add(MsoTriState.msoTrue);
+            PowerPoint.CustomLayout customLayout = pptPresentation.SlideMaster.CustomLayouts[Microsoft.Office.Interop.PowerPoint.PpSlideLayout.ppLayoutText];
+
+            //Create new Slide
+            slides = pptPresentation.Slides;
+            slide_Second = slides.AddSlide(1, customLayout);
+            slide_First = slides.AddSlide(1, customLayout);
+            slide_Second.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
+            slide_First.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
+          
+            //Add Title
+            AddPPHeader(slide_First, "");
+            
+            //Create ASU Table
+            DataTable dt = CreateDataTableFromDGV(dataGridView1);
+            CreateASUTableLayout(slide_First, dt);
+
+            //Create UMD Table
+            DataTable dt_UMD = CreateDataTableFromDGV(dataGridView2);
+            if (dataGridView2.RowCount != 0)
+                SetUpLowerPPTable(slide_First, dt_UMD);
+
+            //Set up CIV/MILITARY Legend
+            SetUpPPLegend(slide_First);
+
+            //Notes on PowerPoint - First Slide
+            slide_First.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
+
+            //Add Title
+            AddPPHeader(slide_Second, " (EXECUTION)");
+
+            //Create same ASU table for second slide
+            CreateASUTableLayout(slide_Second, dt);
+
+            //Create Executed Table
+            DataTable dt_Exec = CreateDataTableFromDGV(dataGridView3);
+            if (dataGridView3.RowCount != 0)
+                SetUpLowerPPTable(slide_Second, dt_Exec);
+
+            //Set up CIV/MILITARY Legend
+            SetUpPPLegend(slide_Second);
+
+            //Notes on PowerPoint - Second Slide
+            slide_Second.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
+            
+            //Save PowerPoint
+            pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
+        }
+
+        private void AddPPHeader(PowerPoint._Slide slide, string add)
+        {
+            PowerPoint.TextRange objText;
+
+            objText = slide.Shapes[1].TextFrame.TextRange;
+            objText.Text = comboBox2.Text + "\n" + comboBox1.Text + add;
+            objText.Font.Name = "Arial";
+            objText.Font.Color.RGB = ColorTranslator.ToOle(Color.DarkBlue);
+            objText.Font.Bold = MsoTriState.msoTrue;
+            if (comboBox2.Text.Length > 34)
+                objText.Font.Size = 22;
+            else
+                objText.Font.Size = 28;
+
+            var objUnclass = slide.Shapes.AddLabel(MsoTextOrientation.msoTextOrientationHorizontal, 680, 0, 100, 20);
+            objUnclass.TextFrame.TextRange.Font.Size = 8;
+            objUnclass.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+            objUnclass.TextFrame.TextRange.Font.Color.RGB = ColorTranslator.ToOle(Color.Red);
+            objUnclass.TextFrame.TextRange.Text = "UNCLASSIFIED";
+        }
+
+        private void CreateASUTableLayout(PowerPoint._Slide slide, DataTable dt)
+        {
+            if (dataGridView1.RowCount != 0)
+            {
+                var objShape = slide.Shapes.AddTable(dt.Rows.Count + 1, dt.Columns.Count - 2);
+                objShape.Table.Columns._Index(1).Width = 280;
+                objShape.Table.Columns._Index(2).Width = 64;
+                for (int i = 3; i <= objShape.Table.Columns.Count; i++)
+                {
+                    objShape.Table.Columns._Index(i).Width = 40;
+                }
+                for (int i = 1; i <= objShape.Table.Rows.Count; i++)
+                {
+                    objShape.Table.Rows._Index(i).Height = 20;
+                }
+                var table = objShape.Table;
+
+                SetUpASUPPTable(table, dt);
+            }
+            else
+            {
+                Microsoft.Office.Interop.PowerPoint.TextRange objNoASU;
+
+                objNoASU = slide.Shapes[2].TextFrame.TextRange;
+                objNoASU.Text = "NO ASU DATA AVAILABLE";
+            }
+        }
+
+        private void SetUpPPLegend(PowerPoint._Slide slide)
+        {
+            string[] name = { "= CIV / CME", "= MILITARY" };
+            int x = 800;
+            int y = 220;
+            int l = 15;
+            int h = 15;
+
+            var objTitle = slide.Shapes.AddLabel(MsoTextOrientation.msoTextOrientationHorizontal, x - 4, y - 27, 100, h);
+            objTitle.TextFrame.TextRange.Font.Size = 13;
+            objTitle.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+            objTitle.TextFrame.TextRange.Text = "LEGEND";
+
+            for (int i = 0; i < 2; i++)
+            {
+                var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, l, h);
+                var objText = slide.Shapes.AddLabel(MsoTextOrientation.msoTextOrientationHorizontal, x + 12, y - 2, 100, h);
+
+                objRectangle.Line.Weight = 1;
+
+                objText.TextFrame.TextRange.Font.Size = 11;
+                objText.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+
+                if (i == 0)
+                {
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
+                    objText.TextFrame.TextRange.Text = name[i];
+                }
+                else
+                {
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+                    objText.TextFrame.TextRange.Text = name[i];
+                }
+
+                y += 20;
+            }
+        }
+
+        private void SetUpASUPPTable(PowerPoint.Table table, DataTable dt)
+        {
+            table.Cell(1, 1).Shape.TextFrame.TextRange.Text = "";
+            table.Cell(1, 2).Shape.TextFrame.TextRange.Text = "TotalReqs";
+            table.Cell(1, 3).Shape.TextFrame.TextRange.Text = "EN";
+            table.Cell(1, 4).Shape.TextFrame.TextRange.Text = "LG";
+            table.Cell(1, 5).Shape.TextFrame.TextRange.Text = "PK";
+            table.Cell(1, 6).Shape.TextFrame.TextRange.Text = "IN";
+            table.Cell(1, 7).Shape.TextFrame.TextRange.Text = "FM";    
+            table.Cell(1, 8).Shape.TextFrame.TextRange.Text = "PM";
+
+            for (int i = 2; i < 9; i++)
+            {
+                table.Cell(1, i).Shape.TextFrame.TextRange.Font.Size = 12;
+                table.Cell(1, i).Shape.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                table.Cell(1, i).Shape.TextFrame.VerticalAnchor = MsoVerticalAnchor.msoAnchorMiddle;
+            }
+
+            table.Cell(1, 2).Shape.TextFrame.TextRange.Font.Size = 10;
+
+            for (int i = 2; i <= table.Rows.Count; i++)
+            {
+                for (int j = 1; j <= table.Columns.Count; j++)
+                {
+                    table.Cell(i, j).Shape.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                    table.Cell(i, j).Shape.TextFrame.TextRange.Font.Size = 12;
+                    table.Cell(i, j).Shape.TextFrame.TextRange.Text = dt.Rows[i - 2].ItemArray[j - 1].ToString(); ;
+                }
+            }
+        }
+
+        private void SetUpLowerPPTable(PowerPoint._Slide slide, DataTable dt)
+        {
+            int x = 50;
+            int y = 270;
+            int w = 150;
+            int h = 50;
+
+            string s1, s2, s3;
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                s1 = dt.Rows[i].ItemArray[0].ToString();
+                s2 = dt.Rows[i].ItemArray[1].ToString();
+                s3 = dt.Rows[i].ItemArray[2].ToString();
+
+                objRectangle.TextFrame.TextRange.Font.Size = 1;
+                objRectangle.TextFrame.TextRange.Text = s1 + "\n" + s2 + "\n" + s3;
+
+                if (dt.Rows[i].ItemArray[0].ToString().Contains("GS") || dt.Rows[i].ItemArray[0].ToString().Contains("NH"))
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
+                else
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+
+                objRectangle.TextFrame.TextRange.Font.Name = "Arial Narrow";
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Bold = MsoTriState.msoTrue;
+                objRectangle.TextFrame.TextRange.Font.Size = 10;
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Size = 11;
+                objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+
+                x += 170;
+
+                if (x > 730)
+                {
+                    x = 50;
+                    y += 60;
+                }
+            }
+        }
+
+        private DataTable CreateDataTableFromDGV(DataGridView datagrid)
+        {
+            DataTable dt = new DataTable();
+
+            foreach (DataGridViewColumn col in datagrid.Columns)
+            {
+                dt.Columns.Add(col.Name);
+            }
+
+            foreach (DataGridViewRow row in datagrid.Rows)
+            {
+                DataRow drow = dt.NewRow();
+                foreach (DataGridViewCell cell in row.Cells)
+                    drow[cell.ColumnIndex] = cell.Value;
+
+                dt.Rows.Add(drow);
+            }
+
+            return dt;
+        }
+
+        private void exportBtn_Click(object sender, EventArgs e)
+        {
+            ExportPPT();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportPPT();
+        }
+
+        private void ExportPPT()
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "PowerPoint (*.pptx)|*.pptx";
+            dialog.Title = "Select a location to save your powerpoint file.";
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                PowerPoint(dialog.FileName);
+            }
+            else
+                return;
+        }
+        #endregion
+
+        private void importExecute_Btn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "XML (*.xml)|*.xml";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to MERGE the Execute Table from '" + Path.GetFileNameWithoutExtension(dialog.FileName) + "'?", 
+                    "Merge Execute Tables", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes)
+                {
+                    DataSet newSet = new DataSet();
+                    try
+                    {
+                        newSet.ReadXmlSchema(ExcelParse.XSDPath);
+                        newSet.ReadXml(dialog.FileName);
+
+                        DataTable dt = newSet.Tables["ExecuteTable"];
+
+                        DataTable dt_Old = ExcelParse.MainDataSet.Tables["ExecuteTable"];
+
+                        dt_Old.Merge(dt, false);
+
+                        RefreshData();
+
+                        saveBtn.Enabled = true;
+                        saveToolStripMenuItem.Enabled = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("The XML file is corrupted, please re-import files", "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else
+                    return;
+            }
+        }
+    }    
 }
