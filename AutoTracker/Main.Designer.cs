@@ -68,6 +68,7 @@ namespace AutoTracker
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -103,6 +104,7 @@ namespace AutoTracker
             this.mpcnLbl = new System.Windows.Forms.Label();
             this.mpcn_Txt = new System.Windows.Forms.TextBox();
             this.umdGRB = new System.Windows.Forms.GroupBox();
+            this.noMPCNChk = new System.Windows.Forms.CheckBox();
             this.ExecuteLbl = new System.Windows.Forms.Label();
             this.umdProgs = new System.Windows.Forms.ComboBox();
             this.aSUTableProgramsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
@@ -122,6 +124,7 @@ namespace AutoTracker
             this.rectangleShape1 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.deselectBtn = new System.Windows.Forms.Button();
             this.exec_Box = new System.Windows.Forms.GroupBox();
+            this.importExecute_Btn = new System.Windows.Forms.Button();
             this.execDelBtn = new System.Windows.Forms.Button();
             this.exec_AddBtn = new System.Windows.Forms.Button();
             this.execMPCN_Lbl = new System.Windows.Forms.Label();
@@ -131,13 +134,20 @@ namespace AutoTracker
             this.execLbl = new System.Windows.Forms.Label();
             this.execName_Lbl = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
-            this.progTableExecuteTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.uMDTableProgTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.exportBtn = new System.Windows.Forms.Button();
             this.Grade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.executeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MPCN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.iDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pROGIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lRMKIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gradeDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.seriesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mPCNDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.progTableExecuteTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.uMDTableProgTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.exportBtn = new System.Windows.Forms.Button();
+            this.useCurrentProg = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.aSUTableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fundingSchema)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -168,7 +178,7 @@ namespace AutoTracker
             this.comboBox1.Location = new System.Drawing.Point(12, 55);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(163, 28);
+            this.comboBox1.Size = new System.Drawing.Size(163, 32);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.ValueMember = "ID";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
@@ -223,7 +233,7 @@ namespace AutoTracker
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 91);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 95);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
@@ -372,7 +382,7 @@ namespace AutoTracker
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView2.EnableHeadersVisualStyles = false;
-            this.dataGridView2.Location = new System.Drawing.Point(318, 319);
+            this.dataGridView2.Location = new System.Drawing.Point(318, 321);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
@@ -388,7 +398,7 @@ namespace AutoTracker
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView2.ShowCellToolTips = false;
-            this.dataGridView2.Size = new System.Drawing.Size(379, 355);
+            this.dataGridView2.Size = new System.Drawing.Size(379, 366);
             this.dataGridView2.TabIndex = 7;
             this.dataGridView2.Visible = false;
             this.dataGridView2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellClick);
@@ -397,7 +407,7 @@ namespace AutoTracker
             // gradeDataGridViewTextBoxColumn
             // 
             this.gradeDataGridViewTextBoxColumn.DataPropertyName = "Grade";
-            this.gradeDataGridViewTextBoxColumn.FillWeight = 20F;
+            this.gradeDataGridViewTextBoxColumn.FillWeight = 23F;
             this.gradeDataGridViewTextBoxColumn.HeaderText = "Grade";
             this.gradeDataGridViewTextBoxColumn.Name = "gradeDataGridViewTextBoxColumn";
             this.gradeDataGridViewTextBoxColumn.ReadOnly = true;
@@ -405,7 +415,7 @@ namespace AutoTracker
             // nameDataGridViewTextBoxColumn
             // 
             this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.FillWeight = 63F;
+            this.nameDataGridViewTextBoxColumn.FillWeight = 60F;
             this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
             this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
             this.nameDataGridViewTextBoxColumn.ReadOnly = true;
@@ -450,7 +460,7 @@ namespace AutoTracker
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1093, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1093, 27);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -462,14 +472,14 @@ namespace AutoTracker
             this.quitToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.importToolStripMenuItem.Text = "&File";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(173, 24);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -478,7 +488,7 @@ namespace AutoTracker
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(173, 24);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -487,7 +497,7 @@ namespace AutoTracker
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
             this.quitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.quitToolStripMenuItem.ShowShortcutKeys = false;
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(173, 24);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -495,15 +505,24 @@ namespace AutoTracker
             // 
             this.importToolStripMenuItem2.Name = "importToolStripMenuItem2";
             this.importToolStripMenuItem2.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.importToolStripMenuItem2.Size = new System.Drawing.Size(56, 20);
-            this.importToolStripMenuItem2.Text = "&Import";
+            this.importToolStripMenuItem2.Size = new System.Drawing.Size(103, 23);
+            this.importToolStripMenuItem2.Text = "&Import (F5)";
             this.importToolStripMenuItem2.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Enabled = false;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(103, 23);
+            this.exportToolStripMenuItem.Text = "E&xport (F6)";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(63, 23);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -518,7 +537,7 @@ namespace AutoTracker
             this.comboBox2.Location = new System.Drawing.Point(181, 55);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(398, 28);
+            this.comboBox2.Size = new System.Drawing.Size(398, 32);
             this.comboBox2.TabIndex = 4;
             this.comboBox2.ValueMember = "ID";
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
@@ -547,20 +566,20 @@ namespace AutoTracker
             // lbl_WBS
             // 
             this.lbl_WBS.AutoSize = true;
-            this.lbl_WBS.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_WBS.Location = new System.Drawing.Point(12, 28);
+            this.lbl_WBS.Font = new System.Drawing.Font("Calibri", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_WBS.Location = new System.Drawing.Point(10, 27);
             this.lbl_WBS.Name = "lbl_WBS";
-            this.lbl_WBS.Size = new System.Drawing.Size(95, 23);
+            this.lbl_WBS.Size = new System.Drawing.Size(111, 27);
             this.lbl_WBS.TabIndex = 1;
             this.lbl_WBS.Text = "WBS CODE";
             // 
             // lbl_ProgTitle
             // 
             this.lbl_ProgTitle.AutoSize = true;
-            this.lbl_ProgTitle.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_ProgTitle.Location = new System.Drawing.Point(177, 28);
+            this.lbl_ProgTitle.Font = new System.Drawing.Font("Calibri", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_ProgTitle.Location = new System.Drawing.Point(181, 27);
             this.lbl_ProgTitle.Name = "lbl_ProgTitle";
-            this.lbl_ProgTitle.Size = new System.Drawing.Size(140, 23);
+            this.lbl_ProgTitle.Size = new System.Drawing.Size(162, 27);
             this.lbl_ProgTitle.TabIndex = 2;
             this.lbl_ProgTitle.Text = "PROGRAM TITLE";
             // 
@@ -570,10 +589,10 @@ namespace AutoTracker
             this.updateASUBtn.Enabled = false;
             this.updateASUBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateASUBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateASUBtn.Location = new System.Drawing.Point(126, 320);
+            this.updateASUBtn.Location = new System.Drawing.Point(120, 326);
             this.updateASUBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.updateASUBtn.Name = "updateASUBtn";
-            this.updateASUBtn.Size = new System.Drawing.Size(75, 23);
+            this.updateASUBtn.Size = new System.Drawing.Size(78, 28);
             this.updateASUBtn.TabIndex = 24;
             this.updateASUBtn.Text = "UPDATE";
             this.updateASUBtn.UseVisualStyleBackColor = false;
@@ -604,7 +623,7 @@ namespace AutoTracker
             this.asuEditBox.Controls.Add(this.name_txt);
             this.asuEditBox.Location = new System.Drawing.Point(12, 316);
             this.asuEditBox.Name = "asuEditBox";
-            this.asuEditBox.Size = new System.Drawing.Size(300, 358);
+            this.asuEditBox.Size = new System.Drawing.Size(300, 371);
             this.asuEditBox.TabIndex = 25;
             this.asuEditBox.TabStop = false;
             this.asuEditBox.Visible = false;
@@ -616,7 +635,7 @@ namespace AutoTracker
             this.addNewUMD.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addNewUMD.Location = new System.Drawing.Point(157, 291);
             this.addNewUMD.Name = "addNewUMD";
-            this.addNewUMD.Size = new System.Drawing.Size(125, 23);
+            this.addNewUMD.Size = new System.Drawing.Size(125, 28);
             this.addNewUMD.TabIndex = 22;
             this.addNewUMD.Text = "ADD NEW PERSON";
             this.addNewUMD.UseVisualStyleBackColor = false;
@@ -628,9 +647,9 @@ namespace AutoTracker
             this.delASUBtn.Enabled = false;
             this.delASUBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.delASUBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.delASUBtn.Location = new System.Drawing.Point(207, 320);
+            this.delASUBtn.Location = new System.Drawing.Point(204, 326);
             this.delASUBtn.Name = "delASUBtn";
-            this.delASUBtn.Size = new System.Drawing.Size(75, 23);
+            this.delASUBtn.Size = new System.Drawing.Size(78, 28);
             this.delASUBtn.TabIndex = 25;
             this.delASUBtn.Text = "DELETE";
             this.delASUBtn.UseVisualStyleBackColor = false;
@@ -642,9 +661,9 @@ namespace AutoTracker
             this.addASUBtn.Enabled = false;
             this.addASUBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addASUBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addASUBtn.Location = new System.Drawing.Point(45, 320);
+            this.addASUBtn.Location = new System.Drawing.Point(36, 326);
             this.addASUBtn.Name = "addASUBtn";
-            this.addASUBtn.Size = new System.Drawing.Size(75, 23);
+            this.addASUBtn.Size = new System.Drawing.Size(78, 28);
             this.addASUBtn.TabIndex = 23;
             this.addASUBtn.Text = "ADD";
             this.addASUBtn.UseVisualStyleBackColor = false;
@@ -656,7 +675,7 @@ namespace AutoTracker
             this.asuGRBLabel.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.asuGRBLabel.Location = new System.Drawing.Point(7, 22);
             this.asuGRBLabel.Name = "asuGRBLabel";
-            this.asuGRBLabel.Size = new System.Drawing.Size(88, 23);
+            this.asuGRBLabel.Size = new System.Drawing.Size(110, 29);
             this.asuGRBLabel.TabIndex = 41;
             this.asuGRBLabel.Text = "ASU Table";
             // 
@@ -666,7 +685,7 @@ namespace AutoTracker
             this.pm_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pm_lbl.Location = new System.Drawing.Point(55, 288);
             this.pm_lbl.Name = "pm_lbl";
-            this.pm_lbl.Size = new System.Drawing.Size(32, 20);
+            this.pm_lbl.Size = new System.Drawing.Size(38, 23);
             this.pm_lbl.TabIndex = 40;
             this.pm_lbl.Text = "PM:";
             // 
@@ -676,7 +695,7 @@ namespace AutoTracker
             this.fm_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fm_lbl.Location = new System.Drawing.Point(55, 256);
             this.fm_lbl.Name = "fm_lbl";
-            this.fm_lbl.Size = new System.Drawing.Size(32, 20);
+            this.fm_lbl.Size = new System.Drawing.Size(38, 23);
             this.fm_lbl.TabIndex = 39;
             this.fm_lbl.Text = "FM:";
             // 
@@ -686,7 +705,7 @@ namespace AutoTracker
             this.in_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.in_lbl.Location = new System.Drawing.Point(61, 224);
             this.in_lbl.Name = "in_lbl";
-            this.in_lbl.Size = new System.Drawing.Size(26, 20);
+            this.in_lbl.Size = new System.Drawing.Size(30, 23);
             this.in_lbl.TabIndex = 38;
             this.in_lbl.Text = "IN:";
             // 
@@ -696,7 +715,7 @@ namespace AutoTracker
             this.pk_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pk_lbl.Location = new System.Drawing.Point(57, 192);
             this.pk_lbl.Name = "pk_lbl";
-            this.pk_lbl.Size = new System.Drawing.Size(30, 20);
+            this.pk_lbl.Size = new System.Drawing.Size(36, 23);
             this.pk_lbl.TabIndex = 37;
             this.pk_lbl.Text = "PK:";
             // 
@@ -706,7 +725,7 @@ namespace AutoTracker
             this.lg_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lg_lbl.Location = new System.Drawing.Point(57, 160);
             this.lg_lbl.Name = "lg_lbl";
-            this.lg_lbl.Size = new System.Drawing.Size(31, 20);
+            this.lg_lbl.Size = new System.Drawing.Size(37, 23);
             this.lg_lbl.TabIndex = 36;
             this.lg_lbl.Text = "LG:";
             // 
@@ -716,7 +735,7 @@ namespace AutoTracker
             this.en_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.en_lbl.Location = new System.Drawing.Point(58, 128);
             this.en_lbl.Name = "en_lbl";
-            this.en_lbl.Size = new System.Drawing.Size(30, 20);
+            this.en_lbl.Size = new System.Drawing.Size(36, 23);
             this.en_lbl.TabIndex = 35;
             this.en_lbl.Text = "EN:";
             // 
@@ -724,9 +743,9 @@ namespace AutoTracker
             // 
             this.totalReq_lbl.AutoSize = true;
             this.totalReq_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalReq_lbl.Location = new System.Drawing.Point(10, 96);
+            this.totalReq_lbl.Location = new System.Drawing.Point(-3, 98);
             this.totalReq_lbl.Name = "totalReq_lbl";
-            this.totalReq_lbl.Size = new System.Drawing.Size(78, 20);
+            this.totalReq_lbl.Size = new System.Drawing.Size(96, 23);
             this.totalReq_lbl.TabIndex = 34;
             this.totalReq_lbl.Text = "Total Reqs:";
             // 
@@ -734,9 +753,9 @@ namespace AutoTracker
             // 
             this.nameLbl.AutoSize = true;
             this.nameLbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nameLbl.Location = new System.Drawing.Point(41, 64);
+            this.nameLbl.Location = new System.Drawing.Point(33, 66);
             this.nameLbl.Name = "nameLbl";
-            this.nameLbl.Size = new System.Drawing.Size(47, 20);
+            this.nameLbl.Size = new System.Drawing.Size(58, 23);
             this.nameLbl.TabIndex = 33;
             this.nameLbl.Text = "Name:";
             // 
@@ -744,10 +763,10 @@ namespace AutoTracker
             // 
             this.pm_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pm_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pm_txt.Location = new System.Drawing.Point(94, 288);
+            this.pm_txt.Location = new System.Drawing.Point(99, 288);
             this.pm_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pm_txt.Name = "pm_txt";
-            this.pm_txt.Size = new System.Drawing.Size(57, 25);
+            this.pm_txt.Size = new System.Drawing.Size(52, 29);
             this.pm_txt.TabIndex = 21;
             this.pm_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pm_txt_KeyDown);
             // 
@@ -755,10 +774,10 @@ namespace AutoTracker
             // 
             this.fm_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fm_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fm_txt.Location = new System.Drawing.Point(94, 256);
+            this.fm_txt.Location = new System.Drawing.Point(99, 256);
             this.fm_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.fm_txt.Name = "fm_txt";
-            this.fm_txt.Size = new System.Drawing.Size(57, 25);
+            this.fm_txt.Size = new System.Drawing.Size(52, 29);
             this.fm_txt.TabIndex = 20;
             this.fm_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fm_txt_KeyDown);
             // 
@@ -766,10 +785,10 @@ namespace AutoTracker
             // 
             this.in_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.in_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.in_txt.Location = new System.Drawing.Point(94, 224);
+            this.in_txt.Location = new System.Drawing.Point(99, 224);
             this.in_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.in_txt.Name = "in_txt";
-            this.in_txt.Size = new System.Drawing.Size(57, 25);
+            this.in_txt.Size = new System.Drawing.Size(52, 29);
             this.in_txt.TabIndex = 19;
             this.in_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.in_txt_KeyDown);
             // 
@@ -777,10 +796,10 @@ namespace AutoTracker
             // 
             this.pk_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pk_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pk_txt.Location = new System.Drawing.Point(94, 192);
+            this.pk_txt.Location = new System.Drawing.Point(99, 192);
             this.pk_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pk_txt.Name = "pk_txt";
-            this.pk_txt.Size = new System.Drawing.Size(57, 25);
+            this.pk_txt.Size = new System.Drawing.Size(52, 29);
             this.pk_txt.TabIndex = 18;
             this.pk_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pk_txt_KeyDown);
             // 
@@ -788,10 +807,10 @@ namespace AutoTracker
             // 
             this.lg_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lg_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lg_txt.Location = new System.Drawing.Point(94, 160);
+            this.lg_txt.Location = new System.Drawing.Point(99, 160);
             this.lg_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.lg_txt.Name = "lg_txt";
-            this.lg_txt.Size = new System.Drawing.Size(57, 25);
+            this.lg_txt.Size = new System.Drawing.Size(52, 29);
             this.lg_txt.TabIndex = 17;
             this.lg_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lg_txt_KeyDown);
             // 
@@ -799,10 +818,10 @@ namespace AutoTracker
             // 
             this.en_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.en_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.en_txt.Location = new System.Drawing.Point(94, 128);
+            this.en_txt.Location = new System.Drawing.Point(99, 128);
             this.en_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.en_txt.Name = "en_txt";
-            this.en_txt.Size = new System.Drawing.Size(57, 25);
+            this.en_txt.Size = new System.Drawing.Size(52, 29);
             this.en_txt.TabIndex = 16;
             this.en_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.en_txt_KeyDown);
             // 
@@ -810,10 +829,10 @@ namespace AutoTracker
             // 
             this.totalReq_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.totalReq_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalReq_txt.Location = new System.Drawing.Point(94, 96);
+            this.totalReq_txt.Location = new System.Drawing.Point(99, 96);
             this.totalReq_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.totalReq_txt.Name = "totalReq_txt";
-            this.totalReq_txt.Size = new System.Drawing.Size(57, 25);
+            this.totalReq_txt.Size = new System.Drawing.Size(57, 29);
             this.totalReq_txt.TabIndex = 15;
             this.totalReq_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.totalReq_txt_KeyDown);
             // 
@@ -821,10 +840,10 @@ namespace AutoTracker
             // 
             this.name_txt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.name_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.name_txt.Location = new System.Drawing.Point(94, 64);
+            this.name_txt.Location = new System.Drawing.Point(99, 64);
             this.name_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.name_txt.Name = "name_txt";
-            this.name_txt.Size = new System.Drawing.Size(193, 25);
+            this.name_txt.Size = new System.Drawing.Size(188, 29);
             this.name_txt.TabIndex = 14;
             this.name_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.name_txt_KeyDown);
             // 
@@ -837,7 +856,7 @@ namespace AutoTracker
             this.saveBtn.ForeColor = System.Drawing.SystemColors.Window;
             this.saveBtn.Location = new System.Drawing.Point(585, 54);
             this.saveBtn.Name = "saveBtn";
-            this.saveBtn.Size = new System.Drawing.Size(112, 28);
+            this.saveBtn.Size = new System.Drawing.Size(112, 33);
             this.saveBtn.TabIndex = 5;
             this.saveBtn.Text = "SAVE CHANGES";
             this.saveBtn.UseVisualStyleBackColor = false;
@@ -847,9 +866,9 @@ namespace AutoTracker
             // 
             this.gradeLbl.AutoSize = true;
             this.gradeLbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gradeLbl.Location = new System.Drawing.Point(37, 63);
+            this.gradeLbl.Location = new System.Drawing.Point(27, 63);
             this.gradeLbl.Name = "gradeLbl";
-            this.gradeLbl.Size = new System.Drawing.Size(50, 20);
+            this.gradeLbl.Size = new System.Drawing.Size(61, 23);
             this.gradeLbl.TabIndex = 42;
             this.gradeLbl.Text = "Grade:";
             // 
@@ -861,7 +880,7 @@ namespace AutoTracker
             this.gradeTxt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gradeTxt.MaxLength = 10;
             this.gradeTxt.Name = "gradeTxt";
-            this.gradeTxt.Size = new System.Drawing.Size(82, 25);
+            this.gradeTxt.Size = new System.Drawing.Size(105, 29);
             this.gradeTxt.TabIndex = 8;
             this.gradeTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gradeTxt_KeyDown);
             // 
@@ -869,9 +888,9 @@ namespace AutoTracker
             // 
             this.mpcnLbl.AutoSize = true;
             this.mpcnLbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mpcnLbl.Location = new System.Drawing.Point(37, 129);
+            this.mpcnLbl.Location = new System.Drawing.Point(28, 129);
             this.mpcnLbl.Name = "mpcnLbl";
-            this.mpcnLbl.Size = new System.Drawing.Size(50, 20);
+            this.mpcnLbl.Size = new System.Drawing.Size(60, 23);
             this.mpcnLbl.TabIndex = 44;
             this.mpcnLbl.Text = "MPCN:";
             // 
@@ -883,12 +902,14 @@ namespace AutoTracker
             this.mpcn_Txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.mpcn_Txt.MaxLength = 7;
             this.mpcn_Txt.Name = "mpcn_Txt";
-            this.mpcn_Txt.Size = new System.Drawing.Size(57, 25);
+            this.mpcn_Txt.Size = new System.Drawing.Size(86, 29);
             this.mpcn_Txt.TabIndex = 10;
             this.mpcn_Txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mpcn_Txt_KeyDown);
             // 
             // umdGRB
             // 
+            this.umdGRB.Controls.Add(this.useCurrentProg);
+            this.umdGRB.Controls.Add(this.noMPCNChk);
             this.umdGRB.Controls.Add(this.ExecuteLbl);
             this.umdGRB.Controls.Add(this.umdProgs);
             this.umdGRB.Controls.Add(this.umdWBS);
@@ -906,20 +927,32 @@ namespace AutoTracker
             this.umdGRB.Controls.Add(this.gradeTxt);
             this.umdGRB.Controls.Add(this.gradeLbl);
             this.umdGRB.Controls.Add(this.shapeContainer1);
-            this.umdGRB.Location = new System.Drawing.Point(12, 316);
+            this.umdGRB.Location = new System.Drawing.Point(12, 319);
             this.umdGRB.Name = "umdGRB";
-            this.umdGRB.Size = new System.Drawing.Size(300, 308);
+            this.umdGRB.Size = new System.Drawing.Size(300, 368);
             this.umdGRB.TabIndex = 27;
             this.umdGRB.TabStop = false;
             this.umdGRB.Visible = false;
+            // 
+            // noMPCNChk
+            // 
+            this.noMPCNChk.AutoSize = true;
+            this.noMPCNChk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.noMPCNChk.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.noMPCNChk.Location = new System.Drawing.Point(93, 164);
+            this.noMPCNChk.Name = "noMPCNChk";
+            this.noMPCNChk.Size = new System.Drawing.Size(83, 24);
+            this.noMPCNChk.TabIndex = 56;
+            this.noMPCNChk.Text = "No MPCN";
+            this.noMPCNChk.UseVisualStyleBackColor = true;
             // 
             // ExecuteLbl
             // 
             this.ExecuteLbl.AutoSize = true;
             this.ExecuteLbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExecuteLbl.Location = new System.Drawing.Point(10, 192);
+            this.ExecuteLbl.Location = new System.Drawing.Point(11, 229);
             this.ExecuteLbl.Name = "ExecuteLbl";
-            this.ExecuteLbl.Size = new System.Drawing.Size(67, 20);
+            this.ExecuteLbl.Size = new System.Drawing.Size(82, 23);
             this.ExecuteLbl.TabIndex = 55;
             this.ExecuteLbl.Text = "EXECUTE";
             // 
@@ -927,12 +960,13 @@ namespace AutoTracker
             // 
             this.umdProgs.DataSource = this.aSUTableProgramsBindingSource1;
             this.umdProgs.DisplayMember = "Name";
+            this.umdProgs.Enabled = false;
             this.umdProgs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.umdProgs.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.umdProgs.FormattingEnabled = true;
-            this.umdProgs.Location = new System.Drawing.Point(14, 246);
+            this.umdProgs.Location = new System.Drawing.Point(15, 289);
             this.umdProgs.Name = "umdProgs";
-            this.umdProgs.Size = new System.Drawing.Size(272, 24);
+            this.umdProgs.Size = new System.Drawing.Size(279, 28);
             this.umdProgs.TabIndex = 54;
             this.umdProgs.ValueMember = "ID";
             // 
@@ -951,12 +985,13 @@ namespace AutoTracker
             // 
             this.umdWBS.DataSource = this.aSUTableBindingSource1;
             this.umdWBS.DisplayMember = "WBS";
+            this.umdWBS.Enabled = false;
             this.umdWBS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.umdWBS.Font = new System.Drawing.Font("Arial Narrow", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.umdWBS.FormattingEnabled = true;
-            this.umdWBS.Location = new System.Drawing.Point(14, 215);
+            this.umdWBS.Location = new System.Drawing.Point(15, 255);
             this.umdWBS.Name = "umdWBS";
-            this.umdWBS.Size = new System.Drawing.Size(121, 24);
+            this.umdWBS.Size = new System.Drawing.Size(121, 28);
             this.umdWBS.TabIndex = 53;
             this.umdWBS.ValueMember = "ID";
             // 
@@ -966,9 +1001,9 @@ namespace AutoTracker
             this.addExecuteBtn.Enabled = false;
             this.addExecuteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addExecuteBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addExecuteBtn.Location = new System.Drawing.Point(131, 276);
+            this.addExecuteBtn.Location = new System.Drawing.Point(138, 323);
             this.addExecuteBtn.Name = "addExecuteBtn";
-            this.addExecuteBtn.Size = new System.Drawing.Size(156, 23);
+            this.addExecuteBtn.Size = new System.Drawing.Size(156, 28);
             this.addExecuteBtn.TabIndex = 52;
             this.addExecuteBtn.Text = "ADD TO EXECUTE TABLE";
             this.addExecuteBtn.UseVisualStyleBackColor = false;
@@ -978,9 +1013,9 @@ namespace AutoTracker
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(235, 44);
+            this.label2.Location = new System.Drawing.Point(224, 46);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 16);
+            this.label2.Size = new System.Drawing.Size(70, 20);
             this.label2.TabIndex = 51;
             this.label2.Text = "MILITARY";
             // 
@@ -988,9 +1023,9 @@ namespace AutoTracker
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(235, 26);
+            this.label1.Location = new System.Drawing.Point(228, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 16);
+            this.label1.Size = new System.Drawing.Size(66, 20);
             this.label1.TabIndex = 50;
             this.label1.Text = "CIV / CME";
             // 
@@ -1000,9 +1035,9 @@ namespace AutoTracker
             this.delUMD.Enabled = false;
             this.delUMD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.delUMD.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.delUMD.Location = new System.Drawing.Point(211, 160);
+            this.delUMD.Location = new System.Drawing.Point(216, 190);
             this.delUMD.Name = "delUMD";
-            this.delUMD.Size = new System.Drawing.Size(75, 23);
+            this.delUMD.Size = new System.Drawing.Size(78, 28);
             this.delUMD.TabIndex = 13;
             this.delUMD.Text = "DELETE";
             this.delUMD.UseVisualStyleBackColor = false;
@@ -1014,9 +1049,9 @@ namespace AutoTracker
             this.addUMDBtn.Enabled = false;
             this.addUMDBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addUMDBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addUMDBtn.Location = new System.Drawing.Point(49, 160);
+            this.addUMDBtn.Location = new System.Drawing.Point(48, 190);
             this.addUMDBtn.Name = "addUMDBtn";
-            this.addUMDBtn.Size = new System.Drawing.Size(75, 23);
+            this.addUMDBtn.Size = new System.Drawing.Size(78, 28);
             this.addUMDBtn.TabIndex = 11;
             this.addUMDBtn.Text = "ADD";
             this.addUMDBtn.UseVisualStyleBackColor = false;
@@ -1028,7 +1063,7 @@ namespace AutoTracker
             this.umdGRPLabel.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.umdGRPLabel.Location = new System.Drawing.Point(10, 22);
             this.umdGRPLabel.Name = "umdGRPLabel";
-            this.umdGRPLabel.Size = new System.Drawing.Size(91, 23);
+            this.umdGRPLabel.Size = new System.Drawing.Size(113, 29);
             this.umdGRPLabel.TabIndex = 48;
             this.umdGRPLabel.Text = "UMD Table";
             // 
@@ -1038,9 +1073,9 @@ namespace AutoTracker
             this.updateUMDBtn.Enabled = false;
             this.updateUMDBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateUMDBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateUMDBtn.Location = new System.Drawing.Point(130, 160);
+            this.updateUMDBtn.Location = new System.Drawing.Point(132, 190);
             this.updateUMDBtn.Name = "updateUMDBtn";
-            this.updateUMDBtn.Size = new System.Drawing.Size(75, 23);
+            this.updateUMDBtn.Size = new System.Drawing.Size(78, 28);
             this.updateUMDBtn.TabIndex = 12;
             this.updateUMDBtn.Text = "UPDATE";
             this.updateUMDBtn.UseVisualStyleBackColor = false;
@@ -1050,9 +1085,9 @@ namespace AutoTracker
             // 
             this.umdName_lbl.AutoSize = true;
             this.umdName_lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.umdName_lbl.Location = new System.Drawing.Point(40, 96);
+            this.umdName_lbl.Location = new System.Drawing.Point(30, 96);
             this.umdName_lbl.Name = "umdName_lbl";
-            this.umdName_lbl.Size = new System.Drawing.Size(47, 20);
+            this.umdName_lbl.Size = new System.Drawing.Size(58, 23);
             this.umdName_lbl.TabIndex = 46;
             this.umdName_lbl.Text = "Name:";
             // 
@@ -1063,19 +1098,19 @@ namespace AutoTracker
             this.umdName.Location = new System.Drawing.Point(93, 94);
             this.umdName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.umdName.Name = "umdName";
-            this.umdName.Size = new System.Drawing.Size(193, 25);
+            this.umdName.Size = new System.Drawing.Size(201, 29);
             this.umdName.TabIndex = 9;
             this.umdName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.umdName_KeyDown);
             // 
             // shapeContainer1
             // 
-            this.shapeContainer1.Location = new System.Drawing.Point(3, 16);
+            this.shapeContainer1.Location = new System.Drawing.Point(3, 18);
             this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
             this.shapeContainer1.Name = "shapeContainer1";
             this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
             this.rectangleShape2,
             this.rectangleShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(294, 289);
+            this.shapeContainer1.Size = new System.Drawing.Size(294, 347);
             this.shapeContainer1.TabIndex = 49;
             this.shapeContainer1.TabStop = false;
             // 
@@ -1083,7 +1118,7 @@ namespace AutoTracker
             // 
             this.rectangleShape2.FillColor = System.Drawing.Color.White;
             this.rectangleShape2.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
-            this.rectangleShape2.Location = new System.Drawing.Point(215, 29);
+            this.rectangleShape2.Location = new System.Drawing.Point(205, 29);
             this.rectangleShape2.Name = "rectangleShape2";
             this.rectangleShape2.Size = new System.Drawing.Size(15, 15);
             // 
@@ -1091,7 +1126,7 @@ namespace AutoTracker
             // 
             this.rectangleShape1.FillColor = System.Drawing.Color.LightGreen;
             this.rectangleShape1.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
-            this.rectangleShape1.Location = new System.Drawing.Point(215, 10);
+            this.rectangleShape1.Location = new System.Drawing.Point(205, 10);
             this.rectangleShape1.Name = "rectangleShape1";
             this.rectangleShape1.Size = new System.Drawing.Size(15, 15);
             // 
@@ -1104,7 +1139,7 @@ namespace AutoTracker
             this.deselectBtn.ForeColor = System.Drawing.SystemColors.Window;
             this.deselectBtn.Location = new System.Drawing.Point(703, 54);
             this.deselectBtn.Name = "deselectBtn";
-            this.deselectBtn.Size = new System.Drawing.Size(112, 28);
+            this.deselectBtn.Size = new System.Drawing.Size(112, 33);
             this.deselectBtn.TabIndex = 28;
             this.deselectBtn.Text = "DE-SELECT ALL";
             this.deselectBtn.UseVisualStyleBackColor = false;
@@ -1112,6 +1147,7 @@ namespace AutoTracker
             // 
             // exec_Box
             // 
+            this.exec_Box.Controls.Add(this.importExecute_Btn);
             this.exec_Box.Controls.Add(this.execDelBtn);
             this.exec_Box.Controls.Add(this.exec_AddBtn);
             this.exec_Box.Controls.Add(this.execMPCN_Lbl);
@@ -1121,10 +1157,23 @@ namespace AutoTracker
             this.exec_Box.Controls.Add(this.execName_Lbl);
             this.exec_Box.Location = new System.Drawing.Point(703, 88);
             this.exec_Box.Name = "exec_Box";
-            this.exec_Box.Size = new System.Drawing.Size(379, 150);
+            this.exec_Box.Size = new System.Drawing.Size(379, 167);
             this.exec_Box.TabIndex = 29;
             this.exec_Box.TabStop = false;
             this.exec_Box.Visible = false;
+            // 
+            // importExecute_Btn
+            // 
+            this.importExecute_Btn.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.importExecute_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.importExecute_Btn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.importExecute_Btn.Location = new System.Drawing.Point(11, 125);
+            this.importExecute_Btn.Name = "importExecute_Btn";
+            this.importExecute_Btn.Size = new System.Drawing.Size(178, 28);
+            this.importExecute_Btn.TabIndex = 56;
+            this.importExecute_Btn.Text = "IMPORT EXECUTE";
+            this.importExecute_Btn.UseVisualStyleBackColor = false;
+            this.importExecute_Btn.Click += new System.EventHandler(this.importExecute_Btn_Click);
             // 
             // execDelBtn
             // 
@@ -1132,9 +1181,9 @@ namespace AutoTracker
             this.execDelBtn.Enabled = false;
             this.execDelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.execDelBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.execDelBtn.Location = new System.Drawing.Point(298, 121);
+            this.execDelBtn.Location = new System.Drawing.Point(290, 125);
             this.execDelBtn.Name = "execDelBtn";
-            this.execDelBtn.Size = new System.Drawing.Size(75, 23);
+            this.execDelBtn.Size = new System.Drawing.Size(83, 28);
             this.execDelBtn.TabIndex = 55;
             this.execDelBtn.Text = "REMOVE";
             this.execDelBtn.UseVisualStyleBackColor = false;
@@ -1145,9 +1194,9 @@ namespace AutoTracker
             this.exec_AddBtn.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.exec_AddBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exec_AddBtn.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.exec_AddBtn.Location = new System.Drawing.Point(217, 121);
+            this.exec_AddBtn.Location = new System.Drawing.Point(206, 125);
             this.exec_AddBtn.Name = "exec_AddBtn";
-            this.exec_AddBtn.Size = new System.Drawing.Size(75, 23);
+            this.exec_AddBtn.Size = new System.Drawing.Size(78, 28);
             this.exec_AddBtn.TabIndex = 54;
             this.exec_AddBtn.Text = "ADD";
             this.exec_AddBtn.UseVisualStyleBackColor = false;
@@ -1159,7 +1208,7 @@ namespace AutoTracker
             this.execMPCN_Lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.execMPCN_Lbl.Location = new System.Drawing.Point(37, 58);
             this.execMPCN_Lbl.Name = "execMPCN_Lbl";
-            this.execMPCN_Lbl.Size = new System.Drawing.Size(50, 20);
+            this.execMPCN_Lbl.Size = new System.Drawing.Size(60, 23);
             this.execMPCN_Lbl.TabIndex = 53;
             this.execMPCN_Lbl.Text = "MPCN:";
             // 
@@ -1169,17 +1218,17 @@ namespace AutoTracker
             this.execMPCN.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.uMDTableBindingSource, "MPCN", true));
             this.execMPCN.Enabled = false;
             this.execMPCN.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.execMPCN.Location = new System.Drawing.Point(93, 56);
+            this.execMPCN.Location = new System.Drawing.Point(103, 56);
             this.execMPCN.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.execMPCN.Name = "execMPCN";
-            this.execMPCN.Size = new System.Drawing.Size(58, 25);
+            this.execMPCN.Size = new System.Drawing.Size(86, 29);
             this.execMPCN.TabIndex = 52;
             // 
             // uMDTableBindingSource
             // 
             this.uMDTableBindingSource.DataMember = "UMDTable";
             this.uMDTableBindingSource.DataSource = this.fundingSchema;
-            this.uMDTableBindingSource.Filter = "isExecuted = false";
+            this.uMDTableBindingSource.Filter = "";
             // 
             // exec_NameBox
             // 
@@ -1187,9 +1236,9 @@ namespace AutoTracker
             this.exec_NameBox.DisplayMember = "Name";
             this.exec_NameBox.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exec_NameBox.FormattingEnabled = true;
-            this.exec_NameBox.Location = new System.Drawing.Point(93, 88);
+            this.exec_NameBox.Location = new System.Drawing.Point(103, 88);
             this.exec_NameBox.Name = "exec_NameBox";
-            this.exec_NameBox.Size = new System.Drawing.Size(280, 28);
+            this.exec_NameBox.Size = new System.Drawing.Size(270, 31);
             this.exec_NameBox.TabIndex = 51;
             this.exec_NameBox.ValueMember = "ID";
             // 
@@ -1199,7 +1248,7 @@ namespace AutoTracker
             this.execLbl.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.execLbl.Location = new System.Drawing.Point(6, 16);
             this.execLbl.Name = "execLbl";
-            this.execLbl.Size = new System.Drawing.Size(117, 23);
+            this.execLbl.Size = new System.Drawing.Size(145, 29);
             this.execLbl.TabIndex = 50;
             this.execLbl.Text = "Execute Table";
             // 
@@ -1209,7 +1258,7 @@ namespace AutoTracker
             this.execName_Lbl.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.execName_Lbl.Location = new System.Drawing.Point(40, 91);
             this.execName_Lbl.Name = "execName_Lbl";
-            this.execName_Lbl.Size = new System.Drawing.Size(47, 20);
+            this.execName_Lbl.Size = new System.Drawing.Size(58, 23);
             this.execName_Lbl.TabIndex = 49;
             this.execName_Lbl.Text = "Name:";
             // 
@@ -1234,7 +1283,14 @@ namespace AutoTracker
             this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Grade,
             this.executeName,
-            this.MPCN});
+            this.MPCN,
+            this.iDDataGridViewTextBoxColumn1,
+            this.pROGIDDataGridViewTextBoxColumn1,
+            this.lRMKIDDataGridViewTextBoxColumn,
+            this.gradeDataGridViewTextBoxColumn1,
+            this.seriesDataGridViewTextBoxColumn,
+            this.nameDataGridViewTextBoxColumn2,
+            this.mPCNDataGridViewTextBoxColumn1});
             this.dataGridView3.Cursor = System.Windows.Forms.Cursors.Default;
             this.dataGridView3.DataSource = this.progTableExecuteTableBindingSource;
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1246,7 +1302,7 @@ namespace AutoTracker
             dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView3.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView3.EnableHeadersVisualStyles = false;
-            this.dataGridView3.Location = new System.Drawing.Point(703, 245);
+            this.dataGridView3.Location = new System.Drawing.Point(703, 262);
             this.dataGridView3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
@@ -1262,40 +1318,17 @@ namespace AutoTracker
             this.dataGridView3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView3.ShowCellToolTips = false;
-            this.dataGridView3.Size = new System.Drawing.Size(379, 430);
+            this.dataGridView3.Size = new System.Drawing.Size(379, 425);
             this.dataGridView3.TabIndex = 30;
             this.dataGridView3.Visible = false;
             this.dataGridView3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView3_CellClick);
             this.dataGridView3.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView3_CellFormatting);
             this.dataGridView3.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView3_DataBindingComplete);
             // 
-            // progTableExecuteTableBindingSource
-            // 
-            this.progTableExecuteTableBindingSource.DataMember = "ProgTable_ExecuteTable";
-            this.progTableExecuteTableBindingSource.DataSource = this.aSUTableProgramsBindingSource;
-            // 
-            // uMDTableProgTableBindingSource
-            // 
-            this.uMDTableProgTableBindingSource.Filter = "";
-            // 
-            // exportBtn
-            // 
-            this.exportBtn.BackColor = System.Drawing.Color.OrangeRed;
-            this.exportBtn.Enabled = false;
-            this.exportBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.exportBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.exportBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.exportBtn.Location = new System.Drawing.Point(821, 54);
-            this.exportBtn.Name = "exportBtn";
-            this.exportBtn.Size = new System.Drawing.Size(112, 28);
-            this.exportBtn.TabIndex = 31;
-            this.exportBtn.Text = "EXPORT";
-            this.exportBtn.UseVisualStyleBackColor = false;
-            // 
             // Grade
             // 
             this.Grade.DataPropertyName = "Grade";
-            this.Grade.FillWeight = 20F;
+            this.Grade.FillWeight = 23F;
             this.Grade.HeaderText = "Grade";
             this.Grade.Name = "Grade";
             this.Grade.ReadOnly = true;
@@ -1316,17 +1349,105 @@ namespace AutoTracker
             this.MPCN.Name = "MPCN";
             this.MPCN.ReadOnly = true;
             // 
-            // exportToolStripMenuItem
+            // iDDataGridViewTextBoxColumn1
             // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.exportToolStripMenuItem.Text = "E&xport";
+            this.iDDataGridViewTextBoxColumn1.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn1.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn1.Name = "iDDataGridViewTextBoxColumn1";
+            this.iDDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.iDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // pROGIDDataGridViewTextBoxColumn1
+            // 
+            this.pROGIDDataGridViewTextBoxColumn1.DataPropertyName = "PROG_ID";
+            this.pROGIDDataGridViewTextBoxColumn1.HeaderText = "PROG_ID";
+            this.pROGIDDataGridViewTextBoxColumn1.Name = "pROGIDDataGridViewTextBoxColumn1";
+            this.pROGIDDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.pROGIDDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // lRMKIDDataGridViewTextBoxColumn
+            // 
+            this.lRMKIDDataGridViewTextBoxColumn.DataPropertyName = "LRMK_ID";
+            this.lRMKIDDataGridViewTextBoxColumn.HeaderText = "LRMK_ID";
+            this.lRMKIDDataGridViewTextBoxColumn.Name = "lRMKIDDataGridViewTextBoxColumn";
+            this.lRMKIDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.lRMKIDDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // gradeDataGridViewTextBoxColumn1
+            // 
+            this.gradeDataGridViewTextBoxColumn1.DataPropertyName = "Grade";
+            this.gradeDataGridViewTextBoxColumn1.HeaderText = "Grade";
+            this.gradeDataGridViewTextBoxColumn1.Name = "gradeDataGridViewTextBoxColumn1";
+            this.gradeDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.gradeDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // seriesDataGridViewTextBoxColumn
+            // 
+            this.seriesDataGridViewTextBoxColumn.DataPropertyName = "Series";
+            this.seriesDataGridViewTextBoxColumn.HeaderText = "Series";
+            this.seriesDataGridViewTextBoxColumn.Name = "seriesDataGridViewTextBoxColumn";
+            this.seriesDataGridViewTextBoxColumn.ReadOnly = true;
+            this.seriesDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // nameDataGridViewTextBoxColumn2
+            // 
+            this.nameDataGridViewTextBoxColumn2.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn2.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn2.Name = "nameDataGridViewTextBoxColumn2";
+            this.nameDataGridViewTextBoxColumn2.ReadOnly = true;
+            this.nameDataGridViewTextBoxColumn2.Visible = false;
+            // 
+            // mPCNDataGridViewTextBoxColumn1
+            // 
+            this.mPCNDataGridViewTextBoxColumn1.DataPropertyName = "MPCN";
+            this.mPCNDataGridViewTextBoxColumn1.HeaderText = "MPCN";
+            this.mPCNDataGridViewTextBoxColumn1.Name = "mPCNDataGridViewTextBoxColumn1";
+            this.mPCNDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.mPCNDataGridViewTextBoxColumn1.Visible = false;
+            // 
+            // progTableExecuteTableBindingSource
+            // 
+            this.progTableExecuteTableBindingSource.DataMember = "ProgTable_ExecuteTable";
+            this.progTableExecuteTableBindingSource.DataSource = this.aSUTableProgramsBindingSource;
+            // 
+            // uMDTableProgTableBindingSource
+            // 
+            this.uMDTableProgTableBindingSource.Filter = "";
+            // 
+            // exportBtn
+            // 
+            this.exportBtn.BackColor = System.Drawing.Color.OrangeRed;
+            this.exportBtn.Enabled = false;
+            this.exportBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exportBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exportBtn.ForeColor = System.Drawing.SystemColors.Window;
+            this.exportBtn.Location = new System.Drawing.Point(821, 54);
+            this.exportBtn.Name = "exportBtn";
+            this.exportBtn.Size = new System.Drawing.Size(112, 33);
+            this.exportBtn.TabIndex = 31;
+            this.exportBtn.Text = "EXPORT";
+            this.exportBtn.UseVisualStyleBackColor = false;
+            this.exportBtn.Click += new System.EventHandler(this.exportBtn_Click);
+            // 
+            // useCurrentProg
+            // 
+            this.useCurrentProg.AutoSize = true;
+            this.useCurrentProg.Checked = true;
+            this.useCurrentProg.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useCurrentProg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.useCurrentProg.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.useCurrentProg.Location = new System.Drawing.Point(143, 257);
+            this.useCurrentProg.Name = "useCurrentProg";
+            this.useCurrentProg.Size = new System.Drawing.Size(144, 24);
+            this.useCurrentProg.TabIndex = 57;
+            this.useCurrentProg.Text = "Use Current Program";
+            this.useCurrentProg.UseVisualStyleBackColor = true;
+            this.useCurrentProg.CheckedChanged += new System.EventHandler(this.useCurrentProg_CheckedChanged);
             // 
             // Main
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1093, 688);
+            this.ClientSize = new System.Drawing.Size(1093, 699);
             this.Controls.Add(this.exportBtn);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.exec_Box);
@@ -1427,11 +1548,6 @@ namespace AutoTracker
         private System.Windows.Forms.Label asuGRBLabel;
         private System.Windows.Forms.Label umdGRPLabel;
         private System.Windows.Forms.Button addUMDBtn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn gradeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mPCNDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProgramID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LRMK_ID;
         private System.Windows.Forms.Button delUMD;
         private System.Windows.Forms.Button delASUBtn;
         private System.Windows.Forms.Button addASUBtn;
@@ -1473,9 +1589,24 @@ namespace AutoTracker
         private System.Windows.Forms.Button execDelBtn;
         private System.Windows.Forms.Button exportBtn;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn gradeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mPCNDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProgramID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LRMK_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Grade;
         private System.Windows.Forms.DataGridViewTextBoxColumn executeName;
         private System.Windows.Forms.DataGridViewTextBoxColumn MPCN;
-        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn iDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pROGIDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lRMKIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn gradeDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn seriesDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mPCNDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.Button importExecute_Btn;
+        private System.Windows.Forms.CheckBox noMPCNChk;
+        private System.Windows.Forms.CheckBox useCurrentProg;
     }
 }
