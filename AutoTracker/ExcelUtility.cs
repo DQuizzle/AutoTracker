@@ -32,11 +32,12 @@ namespace AutoTracker
         #region Generate CSV Method
         public bool GenerateCSV(string input1, string input2, string output)
         {
+            /*
             if (HasWritePermissions(input1.Split('.')[0] + "test.txt") == false && output != "")
             {
                 MessageBox.Show("Please load a valid file");
             }
-
+            */
             //Start Excel Import
             FileStream excelStream;
             try

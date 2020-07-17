@@ -22,7 +22,6 @@
               <xs:element name="Series" msprop:Generator_ColumnVarNameInTable="columnSeries" msprop:Generator_ColumnPropNameInRow="Series" msprop:Generator_ColumnPropNameInTable="SeriesColumn" msprop:Generator_UserColumnName="Series" type="xs:string" minOccurs="0" />
               <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
               <xs:element name="MPCN" msprop:Generator_ColumnVarNameInTable="columnMPCN" msprop:Generator_ColumnPropNameInRow="MPCN" msprop:Generator_ColumnPropNameInTable="MPCNColumn" msprop:Generator_UserColumnName="MPCN" type="xs:string" minOccurs="0" />
-              <xs:element name="isExecuted" msprop:Generator_ColumnVarNameInTable="columnisExecuted" msprop:Generator_ColumnPropNameInRow="isExecuted" msprop:Generator_ColumnPropNameInTable="isExecutedColumn" msprop:Generator_UserColumnName="isExecuted" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -64,13 +63,13 @@
         <xs:element name="ExecuteTable" msprop:Generator_TableClassName="ExecuteTableDataTable" msprop:Generator_TableVarName="tableExecuteTable" msprop:Generator_TablePropName="ExecuteTable" msprop:Generator_RowDeletingName="ExecuteTableRowDeleting" msprop:Generator_RowChangingName="ExecuteTableRowChanging" msprop:Generator_RowEvHandlerName="ExecuteTableRowChangeEventHandler" msprop:Generator_RowDeletedName="ExecuteTableRowDeleted" msprop:Generator_UserTableName="ExecuteTable" msprop:Generator_RowChangedName="ExecuteTableRowChanged" msprop:Generator_RowEvArgName="ExecuteTableRowChangeEvent" msprop:Generator_RowClassName="ExecuteTableRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:string" />
-              <xs:element name="PROG_ID" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnPROG_ID" msprop:Generator_ColumnPropNameInRow="PROG_ID" msprop:Generator_ColumnPropNameInTable="PROG_IDColumn" msprop:Generator_UserColumnName="PROG_ID" type="xs:string" minOccurs="0" />
+              <xs:element name="PROG_ID" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnPROG_ID" msprop:Generator_ColumnPropNameInRow="PROG_ID" msprop:Generator_ColumnPropNameInTable="PROG_IDColumn" msprop:Generator_UserColumnName="PROG_ID" type="xs:string" />
               <xs:element name="LRMK_ID" msprop:Generator_ColumnVarNameInTable="columnLRMK_ID" msprop:Generator_ColumnPropNameInRow="LRMK_ID" msprop:Generator_ColumnPropNameInTable="LRMK_IDColumn" msprop:Generator_UserColumnName="LRMK_ID" type="xs:string" minOccurs="0" />
               <xs:element name="Grade" msprop:Generator_ColumnVarNameInTable="columnGrade" msprop:Generator_ColumnPropNameInRow="Grade" msprop:Generator_ColumnPropNameInTable="GradeColumn" msprop:Generator_UserColumnName="Grade" type="xs:string" minOccurs="0" />
               <xs:element name="Series" msprop:Generator_ColumnVarNameInTable="columnSeries" msprop:Generator_ColumnPropNameInRow="Series" msprop:Generator_ColumnPropNameInTable="SeriesColumn" msprop:Generator_UserColumnName="Series" type="xs:string" minOccurs="0" />
               <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
               <xs:element name="MPCN" msprop:Generator_ColumnVarNameInTable="columnMPCN" msprop:Generator_ColumnPropNameInRow="MPCN" msprop:Generator_ColumnPropNameInTable="MPCNColumn" msprop:Generator_UserColumnName="MPCN" type="xs:string" minOccurs="0" />
+              <xs:element name="ProgramName" msprop:Generator_ColumnVarNameInTable="columnProgramName" msprop:Generator_ColumnPropNameInRow="ProgramName" msprop:Generator_ColumnPropNameInTable="ProgramNameColumn" msprop:Generator_UserColumnName="ProgramName" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -92,17 +91,13 @@
       <xs:selector xpath=".//mstns:ProgTable" />
       <xs:field xpath="mstns:ID" />
     </xs:unique>
-    <xs:unique name="ExecuteTable_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
-      <xs:selector xpath=".//mstns:ExecuteTable" />
-      <xs:field xpath="mstns:ID" />
-    </xs:unique>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
       <msdata:Relationship name="ASUTable_Programs" msdata:parent="ASUTable" msdata:child="ProgTable" msdata:parentkey="WBS" msdata:childkey="WBS_ID" msprop:Generator_UserChildTable="ProgTable" msprop:Generator_ChildPropName="GetProgTableRows" msprop:Generator_UserRelationName="ASUTable_Programs" msprop:Generator_ParentPropName="ASUTableRow" msprop:Generator_RelationVarName="relationASUTable_Programs" msprop:Generator_UserParentTable="ASUTable" />
       <msdata:Relationship name="ProgTable_UMDTable" msdata:parent="ProgTable" msdata:child="UMDTable" msdata:parentkey="ID" msdata:childkey="PROG_ID" msprop:Generator_UserChildTable="UMDTable" msprop:Generator_ChildPropName="GetUMDTableRows" msprop:Generator_UserRelationName="ProgTable_UMDTable" msprop:Generator_RelationVarName="relationProgTable_UMDTable" msprop:Generator_UserParentTable="ProgTable" msprop:Generator_ParentPropName="ProgTableRow" />
       <msdata:Relationship name="ProgTable_ReqsTable" msdata:parent="ProgTable" msdata:child="ReqsTable" msdata:parentkey="ID" msdata:childkey="ProgID" msprop:Generator_UserChildTable="ReqsTable" msprop:Generator_ChildPropName="GetReqsTableRows" msprop:Generator_UserRelationName="ProgTable_ReqsTable" msprop:Generator_ParentPropName="ProgTableRow" msprop:Generator_RelationVarName="relationProgTable_ReqsTable" msprop:Generator_UserParentTable="ProgTable" />
-      <msdata:Relationship name="ProgTable_ExecuteTable" msdata:parent="ProgTable" msdata:child="ExecuteTable" msdata:parentkey="ID" msdata:childkey="PROG_ID" msprop:Generator_UserChildTable="ExecuteTable" msprop:Generator_ChildPropName="GetExecuteTableRows" msprop:Generator_UserRelationName="ProgTable_ExecuteTable" msprop:Generator_ParentPropName="ProgTableRow" msprop:Generator_RelationVarName="relationProgTable_ExecuteTable" msprop:Generator_UserParentTable="ProgTable" />
+      <msdata:Relationship name="ProgTable_ExecuteTable" msdata:parent="ProgTable" msdata:child="ExecuteTable" msdata:parentkey="ID" msdata:childkey="PROG_ID" msprop:Generator_UserChildTable="ExecuteTable" msprop:Generator_ChildPropName="GetExecuteTableRows" msprop:Generator_UserRelationName="ProgTable_ExecuteTable" msprop:Generator_RelationVarName="relationProgTable_ExecuteTable" msprop:Generator_UserParentTable="ProgTable" msprop:Generator_ParentPropName="ProgTableRow" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>
