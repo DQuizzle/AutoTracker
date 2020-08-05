@@ -18,12 +18,10 @@ namespace AutoTracker.Tables
         public string Series { get; private set; }
         public string Name { get; private set; }
         public string MPCN { get; private set; }
-
-        public bool isExecuted { get; private set; }
         #endregion
 
         #region Constructor
-        public UMDTable(Guid mapped_ASUID, string LRMK, string Grade, string Series, string Name, string MPCN, bool isExecuted)
+        public UMDTable(Guid mapped_ASUID, string LRMK, string Grade, string Series, string Name, string MPCN)
         {
             this.ID = Guid.NewGuid();
             this.mapped_ASUID = mapped_ASUID;
@@ -32,7 +30,6 @@ namespace AutoTracker.Tables
             this.Series = Series;
             this.Name = Name;
             this.MPCN = MPCN;
-            this.isExecuted = isExecuted;
         }
         #endregion
     }
