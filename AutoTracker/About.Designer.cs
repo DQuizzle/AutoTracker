@@ -76,7 +76,7 @@ namespace AutoTracker
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(172, 61);
             this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "samuel.bixler@us.af.mil\r\nDSN: 468-7323\r\n(478) 926-7323\r\n";
+            this.textBox2.Text = "michael.di_biase@us.af.mil\r\nDSN: 468-6706\r\n(478) 926-6706\r\n";
             // 
             // label2
             // 
@@ -86,7 +86,7 @@ namespace AutoTracker
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(95, 20);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Samuel Bixler";
+            this.label2.Text = "Michael Di Biase";
             // 
             // label3
             // 
