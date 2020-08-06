@@ -148,6 +148,8 @@ namespace AutoTracker
             this.uMDTableProgTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.exportBtn = new System.Windows.Forms.Button();
             this.useCurrentProg = new System.Windows.Forms.CheckBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.aSUTableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fundingSchema)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -765,6 +767,7 @@ namespace AutoTracker
             this.pm_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pm_txt.Location = new System.Drawing.Point(99, 288);
             this.pm_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pm_txt.MaxLength = 4;
             this.pm_txt.Name = "pm_txt";
             this.pm_txt.Size = new System.Drawing.Size(52, 29);
             this.pm_txt.TabIndex = 21;
@@ -776,6 +779,7 @@ namespace AutoTracker
             this.fm_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fm_txt.Location = new System.Drawing.Point(99, 256);
             this.fm_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.fm_txt.MaxLength = 4;
             this.fm_txt.Name = "fm_txt";
             this.fm_txt.Size = new System.Drawing.Size(52, 29);
             this.fm_txt.TabIndex = 20;
@@ -787,6 +791,7 @@ namespace AutoTracker
             this.in_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.in_txt.Location = new System.Drawing.Point(99, 224);
             this.in_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.in_txt.MaxLength = 4;
             this.in_txt.Name = "in_txt";
             this.in_txt.Size = new System.Drawing.Size(52, 29);
             this.in_txt.TabIndex = 19;
@@ -798,6 +803,7 @@ namespace AutoTracker
             this.pk_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pk_txt.Location = new System.Drawing.Point(99, 192);
             this.pk_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pk_txt.MaxLength = 4;
             this.pk_txt.Name = "pk_txt";
             this.pk_txt.Size = new System.Drawing.Size(52, 29);
             this.pk_txt.TabIndex = 18;
@@ -809,6 +815,7 @@ namespace AutoTracker
             this.lg_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lg_txt.Location = new System.Drawing.Point(99, 160);
             this.lg_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.lg_txt.MaxLength = 4;
             this.lg_txt.Name = "lg_txt";
             this.lg_txt.Size = new System.Drawing.Size(52, 29);
             this.lg_txt.TabIndex = 17;
@@ -820,6 +827,7 @@ namespace AutoTracker
             this.en_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.en_txt.Location = new System.Drawing.Point(99, 128);
             this.en_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.en_txt.MaxLength = 4;
             this.en_txt.Name = "en_txt";
             this.en_txt.Size = new System.Drawing.Size(52, 29);
             this.en_txt.TabIndex = 16;
@@ -831,6 +839,7 @@ namespace AutoTracker
             this.totalReq_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.totalReq_txt.Location = new System.Drawing.Point(99, 96);
             this.totalReq_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.totalReq_txt.MaxLength = 4;
             this.totalReq_txt.Name = "totalReq_txt";
             this.totalReq_txt.Size = new System.Drawing.Size(57, 29);
             this.totalReq_txt.TabIndex = 15;
@@ -842,6 +851,7 @@ namespace AutoTracker
             this.name_txt.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.name_txt.Location = new System.Drawing.Point(99, 64);
             this.name_txt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.name_txt.MaxLength = 50;
             this.name_txt.Name = "name_txt";
             this.name_txt.Size = new System.Drawing.Size(188, 29);
             this.name_txt.TabIndex = 14;
@@ -854,7 +864,7 @@ namespace AutoTracker
             this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.saveBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.saveBtn.Location = new System.Drawing.Point(585, 54);
+            this.saveBtn.Location = new System.Drawing.Point(733, 54);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(112, 33);
             this.saveBtn.TabIndex = 5;
@@ -1137,7 +1147,7 @@ namespace AutoTracker
             this.deselectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deselectBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deselectBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.deselectBtn.Location = new System.Drawing.Point(703, 54);
+            this.deselectBtn.Location = new System.Drawing.Point(851, 54);
             this.deselectBtn.Name = "deselectBtn";
             this.deselectBtn.Size = new System.Drawing.Size(112, 33);
             this.deselectBtn.TabIndex = 28;
@@ -1421,7 +1431,7 @@ namespace AutoTracker
             this.exportBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exportBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exportBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.exportBtn.Location = new System.Drawing.Point(821, 54);
+            this.exportBtn.Location = new System.Drawing.Point(969, 54);
             this.exportBtn.Name = "exportBtn";
             this.exportBtn.Size = new System.Drawing.Size(112, 33);
             this.exportBtn.TabIndex = 31;
@@ -1443,11 +1453,35 @@ namespace AutoTracker
             this.useCurrentProg.Text = "Use Current Program";
             this.useCurrentProg.UseVisualStyleBackColor = true;
             this.useCurrentProg.CheckedChanged += new System.EventHandler(this.useCurrentProg_CheckedChanged);
+            //
+            // comboBox3
+            //
+            this.comboBox3.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox3.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(585, 55);
+            this.comboBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(112, 32);
+            this.comboBox3.TabIndex = 32;
+            //
+            // label3
+            //
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Calibri", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(580, 24);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 27);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "TIER";
             // 
             // Main
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1093, 699);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.exportBtn);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.exec_Box);
@@ -1608,5 +1642,7 @@ namespace AutoTracker
         private System.Windows.Forms.Button importExecute_Btn;
         private System.Windows.Forms.CheckBox noMPCNChk;
         private System.Windows.Forms.CheckBox useCurrentProg;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.Label label3;
     }
 }

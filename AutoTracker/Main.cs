@@ -49,6 +49,8 @@ namespace AutoTracker
 
                 uMDTableBindingSource.DataSource = ds;
                 uMDTableBindingSource.Sort = "Name Asc";
+                
+                comboBox3.DataSource = new int[]{ 1, 2, 3, 4, 5 };
 
                 comboBox1.SelectedIndex = 1;
                 umdWBS.SelectedIndex = 1;
@@ -521,6 +523,30 @@ namespace AutoTracker
                         MessageBox.Show("MPCN already exists.", "Existing MPCN", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+                    else
+                    {
+                        if (reqProgID == null)
+                        {
+                            int i = dataGridView1.CurrentRow.Index;
+                            reqProgID = dataGridView1.Rows[i].Cells[8].Value.ToString();
+                        }
+                        DataRow newRow = dt.NewRow();
+
+                        newRow["ID"] = Guid.NewGuid();
+                        newRow["PROG_ID"] = reqProgID;
+                        newRow["LRMK_ID"] = comboBox2.Text;
+                        newRow["Grade"] = gradeTxt.Text;
+                        newRow["Series"] = "";
+                        newRow["Name"] = umdName.Text;
+                        newRow["MPCN"] = mpcn_Txt.Text;
+
+                        dt.Rows.Add(newRow);
+
+                        saveBtn.Enabled = true;
+                        saveToolStripMenuItem.Enabled = true;
+                        addUMDBtn.Enabled = false;
+                        updateUMDBtn.Enabled = false;
+                   }
                 }
                 else
                 {
@@ -707,12 +733,21 @@ namespace AutoTracker
         private void exec_AddBtn_Click(object sender, EventArgs e)
         {
             var reqProgID = comboBox2.SelectedValue;
+            string programName;
 
             DataTable dt = ExcelParse.MainDataSet.Tables["UMDTable"];
             DataRow[] drMPCNChk = dt.Select("MPCN='" + execMPCN.Text + "'");
+            
+            DataTable findProgName = ExcelParse.MainDataSet.Tables["ProgTable"];
+            DataRow[] drProgName = findProgName.Select("ID ='" + drMPCNChk[0].ItemArray[1].ToString() + "'");
 
             DataTable newExecDt = ExcelParse.MainDataSet.Tables["ExecuteTable"];
             DataRow[] drExecIDChk = newExecDt.Select("MPCN='" + execMPCN.Text + "'");
+            
+            if (drProgName == null)
+                programName = comboBox2.Text;
+            else
+                programName = drProgName[0].ItemArray[2].ToString();
 
             if (drExecIDChk.Length > 0)
             {
@@ -724,11 +759,11 @@ namespace AutoTracker
                     return;
                 }
                 else
-                    addExecTable(reqProgID, newExecDt, drMPCNChk, comboBox2.Text);
+                    addExecTable(reqProgID, newExecDt, drMPCNChk, programName);
             }
             else
             {
-                addExecTable(reqProgID, newExecDt, drMPCNChk, comboBox2.Text);
+                addExecTable(reqProgID, newExecDt, drMPCNChk, programName);
             }
         }
 
@@ -741,6 +776,8 @@ namespace AutoTracker
 
             DataTable dt = ExcelParse.MainDataSet.Tables["UMDTable"];
             DataRow[] drMPCNChk = dt.Select("MPCN='" + mpcn_Txt.Text + "'");
+            
+            DataRow[] drProgName = selectProgram.Select("ID='" + drMPCNChk[0].ItemArray[1].ToString() + "'");
 
             if (useCurrentProg.Checked == true)
             {
@@ -750,7 +787,7 @@ namespace AutoTracker
             else
             {
                 progID = drSelectProgram[0].ItemArray[0].ToString();
-                progName = drSelectProgram[0].ItemArray[2].ToString();
+                progName = drProgName[0].ItemArray[2].ToString();
             }
 
             DataTable newExecDt = ExcelParse.MainDataSet.Tables["ExecuteTable"];
@@ -949,20 +986,26 @@ namespace AutoTracker
             slide_Second.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
             slide_First.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
           
+            //Create DataTables for the DataGridViews
+            DataTable dt = CreateDataTableFromDGV(dataGridView1);
+            DataTable dt_UMD = CreateDataTableFromDGV(dataGridView2);
+            DataTable dt_Exec = CreateDataTableFromDGV(dataGridView3);
+          
             //Add Title
             AddPPHeader(slide_First, "");
             
             //Create ASU Table
-            DataTable dt = CreateDataTableFromDGV(dataGridView1);
             CreateASUTableLayout(slide_First, dt);
 
             //Create UMD Table
-            DataTable dt_UMD = CreateDataTableFromDGV(dataGridView2);
             if (dataGridView2.RowCount != 0)
                 SetUpLowerPPTable(slide_First, dt_UMD);
+                
+            //Set up TIER DATA
+            SetUpTierDataTable(slide_First, dt, dt_UMD, dt_Exec, 1, 680);
 
             //Set up CIV/MILITARY Legend
-            SetUpPPLegend(slide_First);
+            SetUpPPLegend(slide_First, 120, 2);
 
             //Notes on PowerPoint - First Slide
             slide_First.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
@@ -970,16 +1013,15 @@ namespace AutoTracker
             //Add Title
             AddPPHeader(slide_Second, " (EXECUTION)");
 
-            //Create same ASU table for second slide
-            CreateASUTableLayout(slide_Second, dt);
-
             //Create Executed Table
-            DataTable dt_Exec = CreateDataTableFromDGV(dataGridView3);
             if (dataGridView3.RowCount != 0)
-                SetUpLowerPPTable(slide_Second, dt_Exec);
+                SetUpLowerExecPPTable(slide_Second, dt_Exec);
+                
+            //Set up TIER DATA
+            SetUpTierDataTable(slide_Second, dt, dt_UMD, dt_Exec, 2, 720);
 
             //Set up CIV/MILITARY Legend
-            SetUpPPLegend(slide_Second);
+            SetUpPPLegend(slide_Second, 450, 3);
 
             //Notes on PowerPoint - Second Slide
             slide_Second.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
@@ -1037,11 +1079,11 @@ namespace AutoTracker
             }
         }
 
-        private void SetUpPPLegend(PowerPoint._Slide slide)
+        private void SetUpPPLegend(PowerPoint._Slide slide, int y_pass, int count)
         {
-            string[] name = { "= CIV / CME", "= MILITARY" };
+            string[] name = { "= CIV / CME", "= MILITARY", "= NOT IN PROGRAM };
             int x = 800;
-            int y = 220;
+            int y = y_pass;
             int l = 15;
             int h = 15;
 
@@ -1065,9 +1107,14 @@ namespace AutoTracker
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
                     objText.TextFrame.TextRange.Text = name[i];
                 }
+                else if (i == 1)
+                {
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White)
+                }
                 else
                 {
-                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGoldenrodYellow);
+                    objRectangle.Line.DashStyle = MsoLineDashStyle.msoLineDash;
                     objText.TextFrame.TextRange.Text = name[i];
                 }
 
@@ -1105,6 +1152,71 @@ namespace AutoTracker
                 }
             }
         }
+        
+        private void SetUpTierDataTable(PowerPoint._Slide slide, DataTable dtASU, DataTable dtUMD, DataTable dtExec, int count, int x_pass)
+        {
+            int x = x_pass, y = 100, w = 90, h = 50, standard = 0;
+            
+            float filledCount = 0, actualCount = 0;
+            int[] filled = { 0, 0 };
+            string[] title = { "DATA", "ACTUAL" };
+            
+            float totalReqs = float.Parse(dtASU.Rows[0].ItemArray[1].ToString());
+            int funded = (int)Math.Round((dtUMD.Rows.Count / totalReqs) * 100);
+            
+            for (int i = 0; i < dtUMD.Rows.Count; i++)
+            {
+                if (dtUMD.Rows[i].ItemArray[1].ToString() != "VACANT")
+                    filledCount++;
+            }
+            
+            filled[0] = (int)Math.Round((filledCount / totalReqs) * 100);
+            
+            for (int i = 0; i < dtExec.Rows.Count; i++)
+            {
+                if (dtExec.Rows[i].ItemArray[1].ToString() != "VACANT")
+                    actualCount++;
+            }
+            
+            filled[1] = (int)Math.Round((actualCount / totalReqs) * 100);
+            
+            switch (int.Parse(comboBox3.Text))
+            {
+                case 1:
+                    standard = 90;
+                    break;
+                case 2:
+                    standard = 88;
+                    break;
+                case 3:
+                    standard = 85;
+                    break;
+                case 4:
+                    standard = 82;
+                    break;
+                case 5:
+                    standard = 80;
+                    break;
+            }
+            
+            for (int i = 0; i < count; i++)
+            {
+                var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.PowderBlue);
+                objRectangle.TextFrame.TextRange.Font.Size = 11;
+                objRectangle.TextFrame.TextRange.Text = title[i] + "\nTIER: " + comboBox3.Text + "\nStandard: " + standard + "%\nFunded: "
+                    + funded + "%\nFilled: " + filled[i] + "%";
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Bold = MsoTriState.msoTrue;
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Size = 12;
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Underline = MsoTriState.msoTrue;
+                objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                
+                if (i == 1)
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.Pink);
+                    
+                x += 100;
+            }
+        }
 
         private void SetUpLowerPPTable(PowerPoint._Slide slide, DataTable dt)
         {
@@ -1140,6 +1252,51 @@ namespace AutoTracker
                 x += 170;
 
                 if (x > 730)
+                {
+                    x = 50;
+                    y += 60;
+                }
+            }
+        }
+        
+        private void SetUpLowerExecPPTable(PowerPoint._Slide slide, DataTable dt)
+        {
+            int x = 50, y = 100, w = 150, h = 50;
+            
+            string s1, s2, s3, s4;
+            
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                s1 = dt.Rows[i].ItemArray[0].ToString();
+                s2 = dt.Rows[i].ItemArray[1].ToString();
+                s3 = dt.Rows[i].ItemArray[2].ToString();
+                s4 = dt.Rows[i].ItemArray[5].ToString();
+
+                objRectangle.TextFrame.TextRange.Font.Size = 1;
+                objRectangle.TextFrame.TextRange.Text = s1 + "\n" + s2 + "\n" + s3 + "\n" + s4;
+
+                if (dt.Rows[i].ItemArray[0].ToString().Contains("GS") || dt.Rows[i].ItemArray[0].ToString().Contains("NH"))
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
+                else
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+                    
+                if (!dt.Rows[i].ItemArray[5].ToString().Contains(comboBox2.Text))
+                {
+                    objRectangle.Line.DashStyle = MsoLineDashStyle.msoLineDash;
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGoldenrodYellow);
+                }
+
+                objRectangle.TextFrame.TextRange.Font.Name = "Arial Narrow";
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Bold = MsoTriState.msoTrue;
+                objRectangle.TextFrame.TextRange.Font.Size = 10;
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Size = 11;
+                objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+
+                x += 170;
+
+                if (x > 630)
                 {
                     x = 50;
                     y += 60;
@@ -1230,5 +1387,48 @@ namespace AutoTracker
                     return;
             }
         }
+        
+        #region Numeric Check
+        private void numericCheck(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+                e.Handled = true;
+        }
+        
+        private void totalReq_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void en_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void lg_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void pk_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void in_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void fm_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        
+        private void pm_txt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            numericCheck(sender, e);
+        }
+        #endregion
     }    
 }
