@@ -19,7 +19,9 @@ namespace AutoTracker
     {
         #region Initialize Variables
         private DataSet ds;
-        bool loaded;
+        bool loaded, templateLoaded;
+        const int MAX_UMD_PER_SLIDE = 20;
+        string templateLocation;
 
         string saveFile;
         #endregion
@@ -152,32 +154,6 @@ namespace AutoTracker
         private void SetTitle(string path)
         {
             this.Text = "ASU Presenter - " + Path.GetFileNameWithoutExtension(path);
-        }
-
-        private void checkSave(string msg)
-        {
-            if (saveBtn.Enabled == true)
-            {
-                DialogResult result = MessageBox.Show(msg, "Save Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
-                if (result == DialogResult.Yes)
-                {
-                    ExcelParse.WriteXML(saveFile);
-
-                    if (msg == "Do you want to save ALL changes before closing program?")
-                        Environment.Exit(0);
-
-                    saveBtn.Enabled = false;
-                    saveToolStripMenuItem.Enabled = false;
-
-                    SetTitle(saveFile);
-                }
-                else if (result == DialogResult.No)
-                {
-                    if (msg == "Do you want to save ALL changes before closing program?")
-                        Environment.Exit(0);
-                }
-            }
         }
         #endregion
 
@@ -321,6 +297,20 @@ namespace AutoTracker
         {
             checkSave("Are you sure you want to save ALL changes?");
         }
+        
+        private void setTemplateLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Title = "Open Microsoft PowerPoint Template File";
+            open.Filter = "POTX (*.potx)|*.potx";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                templateLocation = open.FileName;
+                templateLoaded = true;
+            }
+            else
+                templateLoaded = false;
+        }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -328,6 +318,34 @@ namespace AutoTracker
                 checkSave("Do you want to save ALL changes before closing program?");     
             else
                 e.Cancel = true;
+        }
+        
+        private void checkSave(string msg)
+        {
+            if (saveBtn.Enabled == true)
+            {
+                DialogResult result = MessageBox.Show(msg, "Save Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                if (result == DialogResult.Yes)
+                {
+                    ExcelParse.WriteXML(saveFile);
+
+                    if (msg == "Do you want to save ALL changes before closing program?")
+                        Environment.Exit(0);
+
+                    saveBtn.Enabled = false;
+                    saveToolStripMenuItem.Enabled = false;
+
+                    SetTitle(saveFile);
+                }
+                else if (result == DialogResult.No)
+                {
+                    if (msg == "Do you want to save ALL changes before closing program?")
+                        Environment.Exit(0);
+                }
+                else
+                    return;
+            }
         }
         #endregion
 
@@ -969,11 +987,28 @@ namespace AutoTracker
         #region Generate PowerPoint
         private void PowerPoint(string path)
         {
+            int number_of_slides = 1;
+            int cur_slide = 1;
+            int extra_rows = 0;
+            int UMD_itr = 0;
+            
+            //Open template file, if not present, return to application
+            if (!templateLoaded)
+            {
+                OpenFileDialog open = new OpenFileDialog();
+                open.Title = "Open Microsoft PowerPoint Template File";
+                open.Filter = "POTX (*.potx)|*.potx";
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    templateLocation = open.FileName;
+                    templateLoaded = true;
+                }
+                else return;
+            }
+            
             PowerPoint.Application pptApplication = new PowerPoint.Application();
 
             PowerPoint.Slides slides;
-            PowerPoint._Slide slide_First;
-            PowerPoint._Slide slide_Second;
             
             //Create the Presentation File
             PowerPoint.Presentation pptPresentation = pptApplication.Presentations.Add(MsoTriState.msoTrue);
@@ -981,53 +1016,84 @@ namespace AutoTracker
 
             //Create new Slide
             slides = pptPresentation.Slides;
-            slide_Second = slides.AddSlide(1, customLayout);
-            slide_First = slides.AddSlide(1, customLayout);
-            slide_Second.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
-            slide_First.ApplyTemplate(@"C:\Program Files (x86)\Microsoft Office\Templates\Presentation Designs\template.potx");
+            slides.AddSlide(1, customLayout);
+            slides.AddSlide(2, customLayout);
+            slides[cur_slide].ApplyTemplate(@templateLocation);
           
             //Create DataTables for the DataGridViews
             DataTable dt = CreateDataTableFromDGV(dataGridView1);
             DataTable dt_UMD = CreateDataTableFromDGV(dataGridView2);
             DataTable dt_Exec = CreateDataTableFromDGV(dataGridView3);
-          
-            //Add Title
-            AddPPHeader(slide_First, "");
             
-            //Create ASU Table
-            CreateASUTableLayout(slide_First, dt);
-
-            //Create UMD Table
-            if (dataGridView2.RowCount != 0)
-                SetUpLowerPPTable(slide_First, dt_UMD);
+            //Generate multiple slides if needed
+            if (dt_UMD.Rows.Count > MAX_UMD_PER_SLIDE)
+            {
+                number_of_slides = dt_UMD.Rows.Count / MAX_UMD_PER_SLIDE;
+                extra_rows = dt_UMD.Rows.Count % MAX_UMD_PER_SLIDE;
                 
-            //Set up TIER DATA
-            SetUpTierDataTable(slide_First, dt, dt_UMD, dt_Exec, 1, 680);
-
-            //Set up CIV/MILITARY Legend
-            SetUpPPLegend(slide_First, 120, 2);
-
-            //Notes on PowerPoint - First Slide
-            slide_First.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
-
-            //Add Title
-            AddPPHeader(slide_Second, " (EXECUTION)");
+                if (extra_rows > 0)
+                    number_of_slides++;
+                    
+                while (UMD_itr < dt_UMD.Rows.Count)
+                {
+                    CreateSlide(slides, cur_slide, dt, dt_UMD, dt_Exec, ref UMD_itr);
+                    
+                    if (UMD_itr < dt_UMD.Rows.Count)
+                    {
+                        cur_slide++;
+                        slides.AddSlide(cur_slide, customLayout);
+                        slides[cur_slide].ApplyTemplate(@templateLocation);
+                    }
+                }
+            }
+            else
+                CreateSlide(slides, cur_slide, dt, dt_UMD, dt_Exec, ref UMD_itr);
+                
+            cur_slide++;
+          
+            //Add Title and Customize Execution Slide
+            AddPPHeader(slides[cur_slide], " (EXECUTION)");
 
             //Create Executed Table
             if (dataGridView3.RowCount != 0)
-                SetUpLowerExecPPTable(slide_Second, dt_Exec);
+                SetUpLowerExecPPTable(slides[cur_slide], dt_Exec);
                 
             //Set up TIER DATA
-            SetUpTierDataTable(slide_Second, dt, dt_UMD, dt_Exec, 2, 720);
+            SetUpTierDataTable(slides[cur_slide], dt, dt_UMD, dt_Exec, 2, 720);
 
             //Set up CIV/MILITARY Legend
-            SetUpPPLegend(slide_Second, 450, 3);
+            SetUpPPLegend(slides[cur_slide], 450, 3);
 
-            //Notes on PowerPoint - Second Slide
+            //Notes on PowerPoint - Execution Slide
             slide_Second.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
+            
+            //Delete Empty Placeholder on Execution Slide
+            slides[cur_slide].Shapes.Placeholders[2].Delete();
             
             //Save PowerPoint
             pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
+        }
+        
+        private void Create Slide(PowerPoint.Slides slides, int slide_num, DataTable dt, DataTable dt_UMD, DataTable dt_Exec, ref int UMD_itr)
+        {
+            //Add Title
+            AddPPHeader(slides[slide_num], "");
+            
+            //Create ASU Table
+            CreateASUTableLayout(slides[slide_num], dt);
+            
+            //Create UMD Table
+            if (dataGridView2.RowCount != 0)
+                SetUpLowerPPTable(slides[slide_num], ref UMD_itr, dt_UMD);
+                
+            //Setup Tier Data
+            SetUpTierDataTable(slides[slide_num], dt, dt_UMD, dt_Exec, 1, 680);
+            
+            //Setup LEGEND
+            SetUpPPLegend(slides[slide_num], 120, 2);
+            
+            //Notes on PowerPoint Slides
+            slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
         }
 
         private void AddPPHeader(PowerPoint._Slide slide, string add)
@@ -1218,7 +1284,7 @@ namespace AutoTracker
             }
         }
 
-        private void SetUpLowerPPTable(PowerPoint._Slide slide, DataTable dt)
+        private void SetUpLowerPPTable(PowerPoint._Slide slide, ref int itr, DataTable dt)
         {
             int x = 50;
             int y = 270;
@@ -1227,17 +1293,17 @@ namespace AutoTracker
 
             string s1, s2, s3;
 
-            for (int i = 0; i < dt.Rows.Count; i++)
+            for (; itr < dt.Rows.Count; itr++)
             {
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
-                s1 = dt.Rows[i].ItemArray[0].ToString();
-                s2 = dt.Rows[i].ItemArray[1].ToString();
-                s3 = dt.Rows[i].ItemArray[2].ToString();
+                s1 = dt.Rows[itr].ItemArray[0].ToString();
+                s2 = dt.Rows[itr].ItemArray[1].ToString();
+                s3 = dt.Rows[itr].ItemArray[2].ToString();
 
                 objRectangle.TextFrame.TextRange.Font.Size = 1;
                 objRectangle.TextFrame.TextRange.Text = s1 + "\n" + s2 + "\n" + s3;
 
-                if (dt.Rows[i].ItemArray[0].ToString().Contains("GS") || dt.Rows[i].ItemArray[0].ToString().Contains("NH"))
+                if (dt.Rows[itr].ItemArray[0].ToString().Contains("GS") || dt.Rows[itr].ItemArray[0].ToString().Contains("NH"))
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
                 else
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
@@ -1255,6 +1321,12 @@ namespace AutoTracker
                 {
                     x = 50;
                     y += 60;
+                }
+                
+                if (((itr + 1) % MAX_UMD_PER_SLIDE == 0) && itr > 0)
+                {
+                    itr++;
+                    break;
                 }
             }
         }
@@ -1349,7 +1421,8 @@ namespace AutoTracker
                 return;
         }
         #endregion
-
+        
+        #region Merge Execute Table
         private void importExecute_Btn_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -1387,6 +1460,7 @@ namespace AutoTracker
                     return;
             }
         }
+        #endregion
         
         #region Numeric Check
         private void numericCheck(object sender, KeyPressEventArgs e)
