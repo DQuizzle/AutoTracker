@@ -150,6 +150,7 @@ namespace AutoTracker
             this.useCurrentProg = new System.Windows.Forms.CheckBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.setTemplateLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.aSUTableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fundingSchema)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -1475,6 +1476,14 @@ namespace AutoTracker
             this.label3.Size = new System.Drawing.Size(52, 27);
             this.label3.TabIndex = 33;
             this.label3.Text = "TIER";
+            //
+            // setTemplateLocationToolStripMenuItem
+            //
+            this.setTemplateLocationToolStripMenuItem.Name = "setTemplateLocationToolStripMenuItem";
+            this.setTemplateLocationToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.setTemplateLocationToolStripMenuItem.Size = new System.Drawing.Size(180, 23);
+            this.setTemplateLocationToolStripMenuItem.Text = "Set &Template Location";
+            this.setTemplateLocationToolStripMenuItem.Click += new System.EventHandler(this.setTemplateLocationToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -1644,5 +1653,6 @@ namespace AutoTracker
         private System.Windows.Forms.CheckBox useCurrentProg;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem setTemplateLocationToolStripMenuItem;
     }
 }
