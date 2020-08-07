@@ -1219,6 +1219,27 @@ namespace AutoTracker
             }
         }
         
+        private float getLatestFYData(DataTable dt)
+        {
+            var year = int.Parse(DateTime.Now.ToString("yy"));
+            
+            while (year != 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].ItemArray[0].ToString().Contains(year.ToString()))
+                        return float.Parse(dt.Rows[i].ItemArray[1].ToString());
+                        
+                    else if (dt.Rows[i].ItemArray[0].ToString().Contains("PEO"))
+                        return float.Parse(dt.Rows[i].ItemArray[1].ToString());
+                }
+                
+                year -= 1;
+            }
+            
+            return float.Parse(dt.Rows[0].ItemArray[1].ToString());
+        }
+        
         private void SetUpTierDataTable(PowerPoint._Slide slide, DataTable dtASU, DataTable dtUMD, DataTable dtExec, int count, int x_pass)
         {
             int x = x_pass, y = 100, w = 90, h = 50, standard = 0;
@@ -1227,7 +1248,7 @@ namespace AutoTracker
             int[] filled = { 0, 0 };
             string[] title = { "DATA", "ACTUAL" };
             
-            float totalReqs = float.Parse(dtASU.Rows[0].ItemArray[1].ToString());
+            float totalReqs = getLatestFYData(dtASU);
             int funded = (int)Math.Round((dtUMD.Rows.Count / totalReqs) * 100);
             
             for (int i = 0; i < dtUMD.Rows.Count; i++)
