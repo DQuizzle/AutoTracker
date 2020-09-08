@@ -1021,7 +1021,21 @@ namespace AutoTracker
             //Create the Presentation File
             PowerPoint.Presentation pptPresentation = pptApplication.Presentations.Add(MsoTriState.msoTrue);
             PowerPoint.CustomLayout customLayout = pptPresentation.SlideMaster.CustomLayouts[Microsoft.Office.Interop.PowerPoint.PpSlideLayout.ppLayoutText];
-
+            
+            //Save PowerPoint
+            try
+            {
+                pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("ERROR: File is currently active in PowerPoint. Please close the PowerPoint file to export.", "Existing File Open", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                pptPresentation.Close();
+                pptApplication.Quit();
+                
+                return;
+            }
+            
             //Create new Slide
             slides = pptPresentation.Slides;
             slides.AddSlide(1, customLayout);
@@ -1040,9 +1054,6 @@ namespace AutoTracker
             CreateSlide(slides, ref cur_slide, dt, dt_UMD, dt_Exec, false, customLayout);
             
             slides[cur_slide].Delete();
-            
-            //Save PowerPoint
-            pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
         }
         
         private void CreateSlide(PowerPoint.Slides slides, ref int cur_slide, DataTable dt, DataTable dt_UMD, DataTable dt_Exec, bool isUMD, PowerPoint.CustomLayout customLayout)
