@@ -314,10 +314,21 @@ namespace AutoTracker
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
-                checkSave("Do you want to save ALL changes before closing program?");     
-            else
-                e.Cancel = true;
+            if (saveBtn.Enabled == true)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save ALL changes before closing program?", "Save Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                
+                if (result == DialogResult.Yes)
+                {
+                    ExcelParse.WriteXML(saveFile);
+                    
+                    Environment.Exit(0);
+                }
+                else if (result == DialogResult.No)
+                    Environment.Exit(0);
+                else
+                    e.Cancel = true;
+            }
         }
         
         private void checkSave(string msg)
@@ -987,10 +998,7 @@ namespace AutoTracker
         #region Generate PowerPoint
         private void PowerPoint(string path)
         {
-            int number_of_slides = 1;
             int cur_slide = 1;
-            int extra_rows = 0;
-            int UMD_itr = 0;
             
             //Open template file, if not present, return to application
             if (!templateLoaded)
@@ -1025,20 +1033,35 @@ namespace AutoTracker
             DataTable dt_UMD = CreateDataTableFromDGV(dataGridView2);
             DataTable dt_Exec = CreateDataTableFromDGV(dataGridView3);
             
-            //Generate multiple slides if needed
-            if (dt_UMD.Rows.Count > MAX_UMD_PER_SLIDE)
-            {
-                number_of_slides = dt_UMD.Rows.Count / MAX_UMD_PER_SLIDE;
-                extra_rows = dt_UMD.Rows.Count % MAX_UMD_PER_SLIDE;
+            //Generate Slides
+            CreateSlide(slides, ref cur_slide, dt, dt_UMD, dt_Exec, true, customLayout);
+            slides.AddSlide(cur_slide, customLayout);
+            
+            CreateSlide(slides, ref cur_slide, dt, dt_UMD, dt_Exec, false, customLayout);
+            
+            slides[cur_slide].Delete();
+            
+            //Save PowerPoint
+            pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
+        }
+        
+        private void CreateSlide(PowerPoint.Slides slides, ref int cur_slide, DataTable dt, DataTable dt_UMD, DataTable dt_Exec, bool isUMD, PowerPoint.CustomLayout customLayout)
+        {
+            int itr = 0;
+            DataTable dtParser;
+            
+            if (isUMD)
+                dtParser = dt_UMD;
+            else
+                dtParser = dt_Exec;
                 
-                if (extra_rows > 0)
-                    number_of_slides++;
-                    
-                while (UMD_itr < dt_UMD.Rows.Count)
+            if (dtParser.Rows.Count > MAX_UMD_PER_SLIDE)
+            {
+                while (itr < dt.Parser.Rows.Count)
                 {
-                    CreateSlide(slides, cur_slide, dt, dt_UMD, dt_Exec, ref UMD_itr);
+                    SetupUMDorExecute(isUMD, slides, cur_slide, dt, dt_UMD, dt_Exec, ref itr);
                     
-                    if (UMD_itr < dt_UMD.Rows.Count)
+                    if (itr < dtParser.Rows.Count)
                     {
                         cur_slide++;
                         slides.AddSlide(cur_slide, customLayout);
@@ -1047,53 +1070,56 @@ namespace AutoTracker
                 }
             }
             else
-                CreateSlide(slides, cur_slide, dt, dt_UMD, dt_Exec, ref UMD_itr);
+                SetupUMDorExecute(isUMD, slides, cur_slide, dt, dt_UMD, dt_Exec, ref itr);
                 
             cur_slide++;
-          
-            //Add Title and Customize Execution Slide
-            AddPPHeader(slides[cur_slide], " (EXECUTION)");
-
-            //Create Executed Table
-            if (dataGridView3.RowCount != 0)
-                SetUpLowerExecPPTable(slides[cur_slide], dt_Exec);
-                
-            //Set up TIER DATA
-            SetUpTierDataTable(slides[cur_slide], dt, dt_UMD, dt_Exec, 2, 720);
-
-            //Set up CIV/MILITARY Legend
-            SetUpPPLegend(slides[cur_slide], 450, 3);
-
-            //Notes on PowerPoint - Execution Slide
-            slide_Second.NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
-            
-            //Delete Empty Placeholder on Execution Slide
-            slides[cur_slide].Shapes.Placeholders[2].Delete();
-            
-            //Save PowerPoint
-            pptPresentation.SaveAs(@path, Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);
         }
         
-        private void Create Slide(PowerPoint.Slides slides, int slide_num, DataTable dt, DataTable dt_UMD, DataTable dt_Exec, ref int UMD_itr)
+        private void SetupUMDorExecute(bool isUMD, PowerPoint.Slides slides, int slide_num, DataTable dt, DataTable dt_UMD, DataTable dt_Exec, ref int itr)
         {
-            //Add Title
-            AddPPHeader(slides[slide_num], "");
+            if (isUMD)
+            {
+                //Add Title
+                AddPPHeader(slides[slide_num], "");
             
-            //Create ASU Table
-            CreateASUTableLayout(slides[slide_num], dt);
+                //Create ASU Table
+                CreateASUTableLayout(slides[slide_num], dt);
             
-            //Create UMD Table
-            if (dataGridView2.RowCount != 0)
-                SetUpLowerPPTable(slides[slide_num], ref UMD_itr, dt_UMD);
+                //Create UMD Table
+                if (dataGridView2.RowCount != 0)
+                    SetUpLowerPPTable(slides[slide_num], ref itr, dt_UMD);
                 
-            //Setup Tier Data
-            SetUpTierDataTable(slides[slide_num], dt, dt_UMD, dt_Exec, 1, 680);
+                //Setup Tier Data
+                SetUpTierDataTable(slides[slide_num], dt, dt_UMD, dt_Exec, 1, 680);
             
-            //Setup LEGEND
-            SetUpPPLegend(slides[slide_num], 120, 2);
+                //Setup LEGEND
+                SetUpPPLegend(slides[slide_num], 120, 2);
             
-            //Notes on PowerPoint Slides
-            slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
+                //Notes on PowerPoint Slides
+                slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Funded Table";
+            }
+            else
+            {
+                //Add Title and customize Execution Table
+                slides[slide_num].ApplyTemplate(@templateLocation);
+                AddPPHeader(slides[slide_num], " (EXECUTION)");
+                
+                //Create Execution Table
+                if (dataGridView3.RowCount != 0)
+                    SetUpLowerExecPPTable(slides[slide_num], ref itr, dt_Exec);
+                    
+                //Setup Tier Data
+                SetUpTierDataTable(slides[slide_num], dt, dt_UMD, dt_Exec, 2, 720);
+            
+                //Setup LEGEND
+                SetUpPPLegend(slides[slide_num], 450, 3);
+                
+                //Delete blank placeholder behind Execution Data
+                slides[slide_num].Shapes.Placeholders[2].Delete();
+            
+                //Notes on PowerPoint Slides
+                slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
+            }
         }
 
         private void AddPPHeader(PowerPoint._Slide slide, string add)
@@ -1158,7 +1184,7 @@ namespace AutoTracker
             objTitle.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
             objTitle.TextFrame.TextRange.Text = "LEGEND";
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < count; i++)
             {
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, l, h);
                 var objText = slide.Shapes.AddLabel(MsoTextOrientation.msoTextOrientationHorizontal, x + 12, y - 2, 100, h);
@@ -1294,7 +1320,7 @@ namespace AutoTracker
                 objRectangle.TextFrame.TextRange.Text = title[i] + "\nTIER: " + comboBox3.Text + "\nStandard: " + standard + "%\nFunded: "
                     + funded + "%\nFilled: " + filled[i] + "%";
                 objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Bold = MsoTriState.msoTrue;
-                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Size = 12;
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Size = 13;
                 objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Underline = MsoTriState.msoTrue;
                 objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
                 
@@ -1352,13 +1378,13 @@ namespace AutoTracker
             }
         }
         
-        private void SetUpLowerExecPPTable(PowerPoint._Slide slide, DataTable dt)
+        private void SetUpLowerExecPPTable(PowerPoint._Slide slide, ref int itr, DataTable dt)
         {
             int x = 50, y = 100, w = 150, h = 50;
             
             string s1, s2, s3, s4;
             
-            for (int i = 0; i < dt.Rows.Count; i++)
+            for (; itr < dt.Rows.Count; itr++)
             {
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
                 s1 = dt.Rows[i].ItemArray[0].ToString();
