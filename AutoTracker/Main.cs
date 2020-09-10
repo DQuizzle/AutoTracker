@@ -274,7 +274,7 @@ namespace AutoTracker
                     SetTitle(saveFile);
                     RefreshData();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("The XML file is corrupted, please re-import files", "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -488,7 +488,7 @@ namespace AutoTracker
 
         private void RemoveExecRow(List<DataRow> drSelected)
         {
-            string ID, name, MPCN;
+            string name, MPCN;
             DataRow[] drExecList;
 
             DataTable dtExec = ExcelParse.MainDataSet.Tables["ExecuteTable"];
@@ -1068,7 +1068,7 @@ namespace AutoTracker
                 
             if (dtParser.Rows.Count > MAX_UMD_PER_SLIDE)
             {
-                while (itr < dt.Parser.Rows.Count)
+                while (itr < dtParser.Rows.Count)
                 {
                     SetupUMDorExecute(isUMD, slides, cur_slide, dt, dt_UMD, dt_Exec, ref itr);
                     
@@ -1184,7 +1184,7 @@ namespace AutoTracker
 
         private void SetUpPPLegend(PowerPoint._Slide slide, int y_pass, int count)
         {
-            string[] name = { "= CIV / CME", "= MILITARY", "= NOT IN PROGRAM };
+            string[] name = { "= CIV / CME", "= MILITARY", "= NOT IN PROGRAM" };
             int x = 800;
             int y = y_pass;
             int l = 15;
@@ -1212,7 +1212,7 @@ namespace AutoTracker
                 }
                 else if (i == 1)
                 {
-                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White)
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
                 }
                 else
                 {
@@ -1398,20 +1398,20 @@ namespace AutoTracker
             for (; itr < dt.Rows.Count; itr++)
             {
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
-                s1 = dt.Rows[i].ItemArray[0].ToString();
-                s2 = dt.Rows[i].ItemArray[1].ToString();
-                s3 = dt.Rows[i].ItemArray[2].ToString();
-                s4 = dt.Rows[i].ItemArray[5].ToString();
+                s1 = dt.Rows[itr].ItemArray[0].ToString();
+                s2 = dt.Rows[itr].ItemArray[1].ToString();
+                s3 = dt.Rows[itr].ItemArray[2].ToString();
+                s4 = dt.Rows[itr].ItemArray[5].ToString();
 
                 objRectangle.TextFrame.TextRange.Font.Size = 1;
                 objRectangle.TextFrame.TextRange.Text = s1 + "\n" + s2 + "\n" + s3 + "\n" + s4;
 
-                if (dt.Rows[i].ItemArray[0].ToString().Contains("GS") || dt.Rows[i].ItemArray[0].ToString().Contains("NH"))
+                if (dt.Rows[itr].ItemArray[0].ToString().Contains("GS") || dt.Rows[itr].ItemArray[0].ToString().Contains("NH"))
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
                 else
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
                     
-                if (!dt.Rows[i].ItemArray[5].ToString().Contains(comboBox2.Text))
+                if (!dt.Rows[itr].ItemArray[5].ToString().Contains(comboBox2.Text))
                 {
                     objRectangle.Line.DashStyle = MsoLineDashStyle.msoLineDash;
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGoldenrodYellow);
@@ -1508,7 +1508,7 @@ namespace AutoTracker
                         saveBtn.Enabled = true;
                         saveToolStripMenuItem.Enabled = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MessageBox.Show("The XML file is corrupted, please re-import files", "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
