@@ -460,6 +460,7 @@ namespace AutoTracker
             this.importToolStripMenuItem,
             this.importToolStripMenuItem2,
             this.exportToolStripMenuItem,
+            this.setTemplateLocationToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
