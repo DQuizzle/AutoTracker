@@ -1213,6 +1213,7 @@ namespace AutoTracker
                 else if (i == 1)
                 {
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+                    objText.TextFrame.TextRange.Text = name[i];
                 }
                 else
                 {
@@ -1334,6 +1335,7 @@ namespace AutoTracker
                 objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Size = 13;
                 objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Underline = MsoTriState.msoTrue;
                 objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
                 
                 if (i == 1)
                     objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.Pink);
@@ -1429,7 +1431,13 @@ namespace AutoTracker
                 if (x > 630)
                 {
                     x = 50;
-                    y += 60;
+                    y += 80;
+                }
+                
+                if (((itr + 1) % MAX_UMD_PER_SLIDE == 0) && itr > 0)
+                {
+                    itr++;
+                    break;
                 }
             }
         }
