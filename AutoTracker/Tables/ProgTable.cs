@@ -14,14 +14,16 @@ namespace AutoTracker.Tables
         public Guid ID { get; set; }
         public string WBS_ID { get; set; }
         public string ProgramTitle { get; set; }
+        public string Tier { get; set; }
         #endregion
 
         #region Constructor
-        public ProgTable(string WBS_ID, string ProgramTitle)
+        public ProgTable(string WBS_ID, string ProgramTitle, string Tier)
         {
             this.ID = Hash(ProgramTitle);
             this.WBS_ID = WBS_ID;
             this.ProgramTitle = ProgramTitle;
+            this.Tier = Tier;
         }
         #endregion
 
