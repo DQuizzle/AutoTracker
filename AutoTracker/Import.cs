@@ -29,11 +29,23 @@ namespace AutoTracker
             File.Delete("temp.csv");
             File.Delete("temp1.csv");
             File.Delete("temp2.csv");
+            File.Delete("temp3.csv");
         }
 
         private void buttonChk()
         {
             button1.Enabled = (!String.IsNullOrEmpty(inputBox1.Text) && !String.IsNullOrEmpty(inputBox2.Text));
+        }
+        
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked == true)
+                openTier.Enabled = true;
+            else
+            {
+                openTier.Enabled = false;
+                inputBox3.Text = "";
+            }
         }
         #endregion
 
@@ -49,6 +61,12 @@ namespace AutoTracker
             inputBox2.Text = util.Browse_xlsx();
             buttonChk();
         }
+        
+        private void openTier_Click(object sender, EventArgs e)
+        {
+            inputBox3.Text = util.Browse_xlsx();
+            buttonChk();
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -57,7 +75,7 @@ namespace AutoTracker
             //Checks to see if Generating the CSVs were successful
             //If successful, opens a save dialog for user to select
             //where to save the .XML database file
-            if (util.GenerateCSV(inputBox1.Text, inputBox2.Text, outputBox1.Text))
+            if (util.GenerateCSV(inputBox1.Text, inputBox2.Text, inputBox3.Text, outputBox1.Text))
             {
 
                 SaveFileDialog dialog = new SaveFileDialog();
