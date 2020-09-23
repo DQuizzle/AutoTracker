@@ -115,7 +115,7 @@ namespace AutoTracker
                 asutables.Rows.Add(new object[] { asu.ID, asu.WBS });
 
             foreach (var prog in prog_Tables)
-                progTables.Rows.Add(new object[] { prog.ID, prog.WBS_ID, prog.ProgramTitle });
+                progTables.Rows.Add(new object[] { prog.ID, prog.WBS_ID, prog.ProgramTitle, prog.Tier });
 
             foreach (var umd in UMDs)
                 umdtables.Rows.Add(new object[] { umd.ID, umd.mapped_ASUID, umd.LRMK, umd.Grade, umd.Series, umd.Name, umd.MPCN });
@@ -208,7 +208,7 @@ namespace AutoTracker
                             //Create a table for each unique program and assign to matching WBS code
                             if (asuProgMatch == null && progTitle != "")
                             {
-                                asuProgMatch = new ProgTable(WBSnum, progTitle);
+                                asuProgMatch = new ProgTable(WBSnum, progTitle, "1");
                                 prog_Tables.Add(asuProgMatch);
 
                                 matchID = asuProgMatch.ID;
@@ -324,7 +324,7 @@ namespace AutoTracker
                                     else
                                         progName = LRMK;
 
-                                    ProgTable newProg = new ProgTable(wbs, progName);
+                                    ProgTable newProg = new ProgTable(wbs, progName, "1");
                                     prog_Tables.Add(newProg);
 
                                     progID = newProg.ID;
@@ -339,7 +339,7 @@ namespace AutoTracker
                                     ASUs.Add(asuID);
                                 }
 
-                                ProgTable newProg = new ProgTable(wbs, wbs_title);
+                                ProgTable newProg = new ProgTable(wbs, wbs_title, "1");
                                 prog_Tables.Add(newProg);
 
                                 progID = newProg.ID;
@@ -347,6 +347,54 @@ namespace AutoTracker
                             
                             UMDTable umdWBS = new UMDTable(progID, LRMK, grade, series, name, mpcn);
                             UMDs.Add(umdWBS);
+                        }
+                    }
+                }
+            }
+            
+            if (File.Exists("temp3.csv"))
+            {
+                using (var csvTierFile = new TextFieldParser("temp3.csv"))
+                {
+                    //Creates columns for all the data needed from Tier excel sheet
+                    csvTable.Columns.Add("Tier", typeof(string));
+                    
+                    csvTierFile.TextFieldType = FieldType.Delimited;
+                    csvTierFile.SetDelimiters(",");
+                    
+                    Dictionary<string, int> fieldPositions = new Dictionary<string, int>();
+                    
+                    while (!csvTierFile.EndOfData)
+                    {
+                        string [] fieldArray;
+                        
+                        try
+                        {
+                            fieldArray = csvTierFile.ReadFields();
+                        }
+                        catch (MalformedLineException)
+                        {
+                            continue;
+                        }
+                        
+                        //If CSV file has a header, it grabs the count of the columns
+                        if (fieldArray[1] == "Program Title")
+                        {
+                            foreach (string header in fieldArray)
+                            {
+                                if (csvTable.Columns.Contains(header))
+                                    fieldPositions.Add(header, Array.IndexOf(fieldArray, header));
+                            }
+                        }
+                        else if (fieldPositions.Count() > 0 && !string.IsNullOrEmpty(fieldArray[1]))
+                        {
+                            string progTitle = fieldArray[1].Trim();
+                            string tier = fieldArray[2].Trim();
+                            ProgTable progTitleMatch = prog_Tables.FindLast(x => x.ProgramTitle == progTitle);
+                            
+                            //If there is a program name match, assign it the tier from the data sheet
+                            if (progTitleMatch != null)
+                                progTitleMatch.Tier = tier;
                         }
                     }
                 }
