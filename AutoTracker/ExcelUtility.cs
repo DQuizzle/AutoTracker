@@ -30,7 +30,7 @@ namespace AutoTracker
         #endregion
 
         #region Generate CSV Method
-        public bool GenerateCSV(string input1, string input2, string output)
+        public bool GenerateCSV(string input1, string input2, string input3, string output)
         {
             /*
             if (HasWritePermissions(input1.Split('.')[0] + "test.txt") == false && output != "")
@@ -126,6 +126,53 @@ namespace AutoTracker
             File.WriteAllText(output_UMD, excel2CSV);
 
             var names = cc.Read<UMD>(output_UMD, inputFileDesc).ToList();
+            
+            //Generate a temp3.csv file if there is an data sheet input for tier data
+            if (input3 != "")
+            {
+                FileStream tierStream;
+                
+                try
+                {
+                    tierStream = File.Open(input3, FileMode.Open, FileAccess.Read);
+                }
+                catch (System.IO.IOException)
+                {
+                    MessageBox.Show("ERROR: " + Path.GetFileName(input3) + " is open. Please close the document and re-process", "Error: Import File Open", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                
+                IExcelDataReader tierReader = ExcelReaderFactory.CreateOpenXmlReader(tierStream);
+                var tierResult = tierReader.AsDataSet();
+                tierReader.Close();
+                
+                excel2CSV = "";
+                row_no = 0; //Eliminate top rows of descriptions
+                
+                while (row_no < tierResult.Tables[0].Rows.Count)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        excel2CSV += tierResult.Tables[0].Rows[row_no][i].ToString() + ",";
+                    }
+                    row_no++;
+                    excel2CSV = excel2CSV.Remove(excel2CSV.Length - 1);
+                    excel2CSV += "\r\n";
+                }
+                
+                string outputTier = "temp3.csv";
+                File.WriteAllText(outputTier, excel2CSV);
+                
+                //CSV read properties
+                CsvFileDescription tierFileDesc = new CsvFileDescription
+                {
+                    SeparatorChar = ",",
+                    FirstLineHasColumnNames = true,
+                    IgnoreUnknownColumns = true
+                };
+                
+                List<ExcelData> TIER = cc.Read<ExcelData>(outputTier, tierFileDesc).ToList();
+            }
 
             List<ExcelData> outList = new List<ExcelData>();
             
