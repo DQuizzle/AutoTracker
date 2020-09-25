@@ -69,6 +69,8 @@ namespace AutoTracker
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.adminAccessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setTemplateLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,7 +80,6 @@ namespace AutoTracker
             this.lbl_ProgTitle = new System.Windows.Forms.Label();
             this.updateASUBtn = new System.Windows.Forms.Button();
             this.asuEditBox = new System.Windows.Forms.GroupBox();
-            this.addNewUMD = new System.Windows.Forms.Button();
             this.delASUBtn = new System.Windows.Forms.Button();
             this.addASUBtn = new System.Windows.Forms.Button();
             this.asuGRBLabel = new System.Windows.Forms.Label();
@@ -98,12 +99,14 @@ namespace AutoTracker
             this.en_txt = new System.Windows.Forms.TextBox();
             this.totalReq_txt = new System.Windows.Forms.TextBox();
             this.name_txt = new System.Windows.Forms.TextBox();
+            this.addNewUMD = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
             this.gradeLbl = new System.Windows.Forms.Label();
             this.gradeTxt = new System.Windows.Forms.TextBox();
             this.mpcnLbl = new System.Windows.Forms.Label();
             this.mpcn_Txt = new System.Windows.Forms.TextBox();
             this.umdGRB = new System.Windows.Forms.GroupBox();
+            this.useCurrentProg = new System.Windows.Forms.CheckBox();
             this.noMPCNChk = new System.Windows.Forms.CheckBox();
             this.ExecuteLbl = new System.Windows.Forms.Label();
             this.umdProgs = new System.Windows.Forms.ComboBox();
@@ -137,20 +140,15 @@ namespace AutoTracker
             this.Grade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.executeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MPCN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.iDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pROGIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lRMKIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gradeDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.seriesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mPCNDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProgramName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.progTableExecuteTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.uMDTableProgTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.exportBtn = new System.Windows.Forms.Button();
-            this.useCurrentProg = new System.Windows.Forms.CheckBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.setTemplateLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.tierBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.aSUTableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fundingSchema)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -168,6 +166,7 @@ namespace AutoTracker
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progTableExecuteTableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uMDTableProgTableBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progTableBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -401,7 +400,7 @@ namespace AutoTracker
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView2.ShowCellToolTips = false;
-            this.dataGridView2.Size = new System.Drawing.Size(379, 366);
+            this.dataGridView2.Size = new System.Drawing.Size(379, 333);
             this.dataGridView2.TabIndex = 7;
             this.dataGridView2.Visible = false;
             this.dataGridView2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellClick);
@@ -451,6 +450,7 @@ namespace AutoTracker
             // 
             this.progTableUMDTableBindingSource.DataMember = "ProgTable_UMDTable";
             this.progTableUMDTableBindingSource.DataSource = this.aSUTableProgramsBindingSource;
+            this.progTableUMDTableBindingSource.Sort = "Grade Asc";
             // 
             // menuStrip1
             // 
@@ -460,6 +460,7 @@ namespace AutoTracker
             this.importToolStripMenuItem,
             this.importToolStripMenuItem2,
             this.exportToolStripMenuItem,
+            this.adminAccessToolStripMenuItem,
             this.setTemplateLocationToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -522,6 +523,22 @@ namespace AutoTracker
             this.exportToolStripMenuItem.Text = "E&xport (F6)";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
+            // adminAccessToolStripMenuItem
+            // 
+            this.adminAccessToolStripMenuItem.Enabled = false;
+            this.adminAccessToolStripMenuItem.Name = "adminAccessToolStripMenuItem";
+            this.adminAccessToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            this.adminAccessToolStripMenuItem.Size = new System.Drawing.Size(125, 23);
+            this.adminAccessToolStripMenuItem.Text = "A&dmin Access";
+            this.adminAccessToolStripMenuItem.Click += new System.EventHandler(this.adminAccessToolStripMenuItem_Click);
+            // 
+            // setTemplateLocationToolStripMenuItem
+            // 
+            this.setTemplateLocationToolStripMenuItem.Name = "setTemplateLocationToolStripMenuItem";
+            this.setTemplateLocationToolStripMenuItem.Size = new System.Drawing.Size(180, 23);
+            this.setTemplateLocationToolStripMenuItem.Text = "Set Template Location";
+            this.setTemplateLocationToolStripMenuItem.Click += new System.EventHandler(this.setTemplateLocationToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -541,7 +558,7 @@ namespace AutoTracker
             this.comboBox2.Location = new System.Drawing.Point(181, 55);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(398, 32);
+            this.comboBox2.Size = new System.Drawing.Size(458, 32);
             this.comboBox2.TabIndex = 4;
             this.comboBox2.ValueMember = "ID";
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
@@ -604,7 +621,6 @@ namespace AutoTracker
             // 
             // asuEditBox
             // 
-            this.asuEditBox.Controls.Add(this.addNewUMD);
             this.asuEditBox.Controls.Add(this.delASUBtn);
             this.asuEditBox.Controls.Add(this.addASUBtn);
             this.asuEditBox.Controls.Add(this.asuGRBLabel);
@@ -625,25 +641,13 @@ namespace AutoTracker
             this.asuEditBox.Controls.Add(this.en_txt);
             this.asuEditBox.Controls.Add(this.totalReq_txt);
             this.asuEditBox.Controls.Add(this.name_txt);
+            this.asuEditBox.Enabled = false;
             this.asuEditBox.Location = new System.Drawing.Point(12, 316);
             this.asuEditBox.Name = "asuEditBox";
             this.asuEditBox.Size = new System.Drawing.Size(300, 371);
             this.asuEditBox.TabIndex = 25;
             this.asuEditBox.TabStop = false;
             this.asuEditBox.Visible = false;
-            // 
-            // addNewUMD
-            // 
-            this.addNewUMD.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.addNewUMD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addNewUMD.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addNewUMD.Location = new System.Drawing.Point(157, 291);
-            this.addNewUMD.Name = "addNewUMD";
-            this.addNewUMD.Size = new System.Drawing.Size(125, 28);
-            this.addNewUMD.TabIndex = 22;
-            this.addNewUMD.Text = "ADD NEW PERSON";
-            this.addNewUMD.UseVisualStyleBackColor = false;
-            this.addNewUMD.Click += new System.EventHandler(this.addNewUMD_Click);
             // 
             // delASUBtn
             // 
@@ -774,6 +778,7 @@ namespace AutoTracker
             this.pm_txt.Size = new System.Drawing.Size(52, 29);
             this.pm_txt.TabIndex = 21;
             this.pm_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pm_txt_KeyDown);
+            this.pm_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pm_txt_KeyPress);
             // 
             // fm_txt
             // 
@@ -786,6 +791,7 @@ namespace AutoTracker
             this.fm_txt.Size = new System.Drawing.Size(52, 29);
             this.fm_txt.TabIndex = 20;
             this.fm_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fm_txt_KeyDown);
+            this.fm_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.fm_txt_KeyPress);
             // 
             // in_txt
             // 
@@ -798,6 +804,7 @@ namespace AutoTracker
             this.in_txt.Size = new System.Drawing.Size(52, 29);
             this.in_txt.TabIndex = 19;
             this.in_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.in_txt_KeyDown);
+            this.in_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.in_txt_KeyPress);
             // 
             // pk_txt
             // 
@@ -810,6 +817,7 @@ namespace AutoTracker
             this.pk_txt.Size = new System.Drawing.Size(52, 29);
             this.pk_txt.TabIndex = 18;
             this.pk_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.pk_txt_KeyDown);
+            this.pk_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.pk_txt_KeyPress);
             // 
             // lg_txt
             // 
@@ -822,6 +830,7 @@ namespace AutoTracker
             this.lg_txt.Size = new System.Drawing.Size(52, 29);
             this.lg_txt.TabIndex = 17;
             this.lg_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lg_txt_KeyDown);
+            this.lg_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lg_txt_KeyPress);
             // 
             // en_txt
             // 
@@ -834,6 +843,7 @@ namespace AutoTracker
             this.en_txt.Size = new System.Drawing.Size(52, 29);
             this.en_txt.TabIndex = 16;
             this.en_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.en_txt_KeyDown);
+            this.en_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.en_txt_KeyPress);
             // 
             // totalReq_txt
             // 
@@ -846,6 +856,7 @@ namespace AutoTracker
             this.totalReq_txt.Size = new System.Drawing.Size(57, 29);
             this.totalReq_txt.TabIndex = 15;
             this.totalReq_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.totalReq_txt_KeyDown);
+            this.totalReq_txt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.totalReq_txt_KeyPress);
             // 
             // name_txt
             // 
@@ -859,6 +870,21 @@ namespace AutoTracker
             this.name_txt.TabIndex = 14;
             this.name_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.name_txt_KeyDown);
             // 
+            // addNewUMD
+            // 
+            this.addNewUMD.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.addNewUMD.Enabled = false;
+            this.addNewUMD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addNewUMD.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addNewUMD.Location = new System.Drawing.Point(318, 661);
+            this.addNewUMD.Name = "addNewUMD";
+            this.addNewUMD.Size = new System.Drawing.Size(168, 28);
+            this.addNewUMD.TabIndex = 22;
+            this.addNewUMD.Text = "ADD NEW PERSON";
+            this.addNewUMD.UseVisualStyleBackColor = false;
+            this.addNewUMD.Visible = false;
+            this.addNewUMD.Click += new System.EventHandler(this.addNewUMD_Click);
+            // 
             // saveBtn
             // 
             this.saveBtn.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -866,7 +892,7 @@ namespace AutoTracker
             this.saveBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.saveBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.saveBtn.Location = new System.Drawing.Point(733, 54);
+            this.saveBtn.Location = new System.Drawing.Point(703, 54);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(112, 33);
             this.saveBtn.TabIndex = 5;
@@ -939,12 +965,27 @@ namespace AutoTracker
             this.umdGRB.Controls.Add(this.gradeTxt);
             this.umdGRB.Controls.Add(this.gradeLbl);
             this.umdGRB.Controls.Add(this.shapeContainer1);
-            this.umdGRB.Location = new System.Drawing.Point(12, 319);
+            this.umdGRB.Location = new System.Drawing.Point(6, 321);
             this.umdGRB.Name = "umdGRB";
             this.umdGRB.Size = new System.Drawing.Size(300, 368);
             this.umdGRB.TabIndex = 27;
             this.umdGRB.TabStop = false;
             this.umdGRB.Visible = false;
+            // 
+            // useCurrentProg
+            // 
+            this.useCurrentProg.AutoSize = true;
+            this.useCurrentProg.Checked = true;
+            this.useCurrentProg.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useCurrentProg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.useCurrentProg.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.useCurrentProg.Location = new System.Drawing.Point(143, 257);
+            this.useCurrentProg.Name = "useCurrentProg";
+            this.useCurrentProg.Size = new System.Drawing.Size(144, 24);
+            this.useCurrentProg.TabIndex = 57;
+            this.useCurrentProg.Text = "Use Current Program";
+            this.useCurrentProg.UseVisualStyleBackColor = true;
+            this.useCurrentProg.CheckedChanged += new System.EventHandler(this.useCurrentProg_CheckedChanged);
             // 
             // noMPCNChk
             // 
@@ -1149,9 +1190,9 @@ namespace AutoTracker
             this.deselectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deselectBtn.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deselectBtn.ForeColor = System.Drawing.SystemColors.Window;
-            this.deselectBtn.Location = new System.Drawing.Point(851, 54);
+            this.deselectBtn.Location = new System.Drawing.Point(821, 54);
             this.deselectBtn.Name = "deselectBtn";
-            this.deselectBtn.Size = new System.Drawing.Size(112, 33);
+            this.deselectBtn.Size = new System.Drawing.Size(142, 33);
             this.deselectBtn.TabIndex = 28;
             this.deselectBtn.Text = "DE-SELECT ALL";
             this.deselectBtn.UseVisualStyleBackColor = false;
@@ -1296,13 +1337,9 @@ namespace AutoTracker
             this.Grade,
             this.executeName,
             this.MPCN,
-            this.iDDataGridViewTextBoxColumn1,
             this.pROGIDDataGridViewTextBoxColumn1,
             this.lRMKIDDataGridViewTextBoxColumn,
-            this.gradeDataGridViewTextBoxColumn1,
-            this.seriesDataGridViewTextBoxColumn,
-            this.nameDataGridViewTextBoxColumn2,
-            this.mPCNDataGridViewTextBoxColumn1});
+            this.ProgramName});
             this.dataGridView3.Cursor = System.Windows.Forms.Cursors.Default;
             this.dataGridView3.DataSource = this.progTableExecuteTableBindingSource;
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1361,14 +1398,6 @@ namespace AutoTracker
             this.MPCN.Name = "MPCN";
             this.MPCN.ReadOnly = true;
             // 
-            // iDDataGridViewTextBoxColumn1
-            // 
-            this.iDDataGridViewTextBoxColumn1.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn1.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn1.Name = "iDDataGridViewTextBoxColumn1";
-            this.iDDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.iDDataGridViewTextBoxColumn1.Visible = false;
-            // 
             // pROGIDDataGridViewTextBoxColumn1
             // 
             this.pROGIDDataGridViewTextBoxColumn1.DataPropertyName = "PROG_ID";
@@ -1385,37 +1414,13 @@ namespace AutoTracker
             this.lRMKIDDataGridViewTextBoxColumn.ReadOnly = true;
             this.lRMKIDDataGridViewTextBoxColumn.Visible = false;
             // 
-            // gradeDataGridViewTextBoxColumn1
+            // ProgramName
             // 
-            this.gradeDataGridViewTextBoxColumn1.DataPropertyName = "Grade";
-            this.gradeDataGridViewTextBoxColumn1.HeaderText = "Grade";
-            this.gradeDataGridViewTextBoxColumn1.Name = "gradeDataGridViewTextBoxColumn1";
-            this.gradeDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.gradeDataGridViewTextBoxColumn1.Visible = false;
-            // 
-            // seriesDataGridViewTextBoxColumn
-            // 
-            this.seriesDataGridViewTextBoxColumn.DataPropertyName = "Series";
-            this.seriesDataGridViewTextBoxColumn.HeaderText = "Series";
-            this.seriesDataGridViewTextBoxColumn.Name = "seriesDataGridViewTextBoxColumn";
-            this.seriesDataGridViewTextBoxColumn.ReadOnly = true;
-            this.seriesDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // nameDataGridViewTextBoxColumn2
-            // 
-            this.nameDataGridViewTextBoxColumn2.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn2.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn2.Name = "nameDataGridViewTextBoxColumn2";
-            this.nameDataGridViewTextBoxColumn2.ReadOnly = true;
-            this.nameDataGridViewTextBoxColumn2.Visible = false;
-            // 
-            // mPCNDataGridViewTextBoxColumn1
-            // 
-            this.mPCNDataGridViewTextBoxColumn1.DataPropertyName = "MPCN";
-            this.mPCNDataGridViewTextBoxColumn1.HeaderText = "MPCN";
-            this.mPCNDataGridViewTextBoxColumn1.Name = "mPCNDataGridViewTextBoxColumn1";
-            this.mPCNDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.mPCNDataGridViewTextBoxColumn1.Visible = false;
+            this.ProgramName.DataPropertyName = "ProgramName";
+            this.ProgramName.HeaderText = "ProgramName";
+            this.ProgramName.Name = "ProgramName";
+            this.ProgramName.ReadOnly = true;
+            this.ProgramName.Visible = false;
             // 
             // progTableExecuteTableBindingSource
             // 
@@ -1441,62 +1446,47 @@ namespace AutoTracker
             this.exportBtn.UseVisualStyleBackColor = false;
             this.exportBtn.Click += new System.EventHandler(this.exportBtn_Click);
             // 
-            // useCurrentProg
-            // 
-            this.useCurrentProg.AutoSize = true;
-            this.useCurrentProg.Checked = true;
-            this.useCurrentProg.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useCurrentProg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.useCurrentProg.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.useCurrentProg.Location = new System.Drawing.Point(143, 257);
-            this.useCurrentProg.Name = "useCurrentProg";
-            this.useCurrentProg.Size = new System.Drawing.Size(144, 24);
-            this.useCurrentProg.TabIndex = 57;
-            this.useCurrentProg.Text = "Use Current Program";
-            this.useCurrentProg.UseVisualStyleBackColor = true;
-            this.useCurrentProg.CheckedChanged += new System.EventHandler(this.useCurrentProg_CheckedChanged);
-            //
-            // comboBox3
-            //
-            this.comboBox3.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.comboBox3.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(585, 55);
-            this.comboBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(112, 32);
-            this.comboBox3.TabIndex = 32;
-            //
             // label3
-            //
+            // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Calibri", 13.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(580, 24);
+            this.label3.Location = new System.Drawing.Point(645, 27);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 27);
             this.label3.TabIndex = 33;
             this.label3.Text = "TIER";
-            //
-            // setTemplateLocationToolStripMenuItem
-            //
-            this.setTemplateLocationToolStripMenuItem.Name = "setTemplateLocationToolStripMenuItem";
-            this.setTemplateLocationToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.setTemplateLocationToolStripMenuItem.Size = new System.Drawing.Size(180, 23);
-            this.setTemplateLocationToolStripMenuItem.Text = "Set &Template Location";
-            this.setTemplateLocationToolStripMenuItem.Click += new System.EventHandler(this.setTemplateLocationToolStripMenuItem_Click);
+            // 
+            // progTableBindingSource
+            // 
+            this.progTableBindingSource.DataMember = "ProgTable";
+            this.progTableBindingSource.DataSource = this.fundingSchema;
+            // 
+            // tierBox1
+            // 
+            this.tierBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tierBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.tierBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.aSUTableProgramsBindingSource, "Tier", true, System.Windows.Forms.DataSourceUpdateMode.OnValidation, null, "N0"));
+            this.tierBox1.Enabled = false;
+            this.tierBox1.Font = new System.Drawing.Font("Arial Narrow", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tierBox1.Location = new System.Drawing.Point(645, 53);
+            this.tierBox1.MaxLength = 1;
+            this.tierBox1.Name = "tierBox1";
+            this.tierBox1.Size = new System.Drawing.Size(52, 34);
+            this.tierBox1.TabIndex = 35;
+            this.tierBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tierBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tierBox1_KeyPress);
             // 
             // Main
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1093, 699);
+            this.Controls.Add(this.tierBox1);
+            this.Controls.Add(this.addNewUMD);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.exportBtn);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.exec_Box);
             this.Controls.Add(this.deselectBtn);
-            this.Controls.Add(this.umdGRB);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.asuEditBox);
             this.Controls.Add(this.lbl_ProgTitle);
@@ -1506,6 +1496,7 @@ namespace AutoTracker
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.umdGRB);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -1536,6 +1527,7 @@ namespace AutoTracker
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progTableExecuteTableBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.uMDTableProgTableBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progTableBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1639,21 +1631,20 @@ namespace AutoTracker
         private System.Windows.Forms.DataGridViewTextBoxColumn mPCNDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProgramID;
         private System.Windows.Forms.DataGridViewTextBoxColumn LRMK_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Grade;
-        private System.Windows.Forms.DataGridViewTextBoxColumn executeName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MPCN;
         private System.Windows.Forms.DataGridViewTextBoxColumn iDDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pROGIDDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn lRMKIDDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn gradeDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn seriesDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mPCNDataGridViewTextBoxColumn1;
         private System.Windows.Forms.Button importExecute_Btn;
         private System.Windows.Forms.CheckBox noMPCNChk;
         private System.Windows.Forms.CheckBox useCurrentProg;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Grade;
+        private System.Windows.Forms.DataGridViewTextBoxColumn executeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MPCN;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pROGIDDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lRMKIDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProgramName;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.BindingSource progTableBindingSource;
         private System.Windows.Forms.ToolStripMenuItem setTemplateLocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem adminAccessToolStripMenuItem;
+        private System.Windows.Forms.TextBox tierBox1;
     }
 }
