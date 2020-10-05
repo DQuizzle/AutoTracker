@@ -20,7 +20,7 @@ namespace AutoTracker
         #region Initialize Variables
         private DataSet ds;
         bool loaded, templateLoaded, adminCheck;
-        const int MAX_UMD_PER_SLIDE = 20;
+        const int MAX_ROWS_PER_SLIDE = 5;
         string templateLocation;
 
         string saveFile;
@@ -554,7 +554,7 @@ namespace AutoTracker
 
         private void addUMDBtn_Click(object sender, EventArgs e)
         {
-            string reqProgID;
+            string reqProgID, series;
 
             if (dataGridView2.CurrentRow != null)
             {
@@ -563,6 +563,11 @@ namespace AutoTracker
             }
             else
                 reqProgID = null;
+                
+            if (gradeTxt.Text.Contains("NH") || gradeTxt.Text.Contains("GS"))
+                series = gradeTxt.Text.Substring(3, gradeTxt.Text.Length - 6);
+            else
+                series = gradeTxt.Text;
 
             if (gradeTxt.Text != "" && umdName.Text != "" && mpcn_Txt.Text != "")
             {
@@ -589,7 +594,7 @@ namespace AutoTracker
                         newRow["PROG_ID"] = reqProgID;
                         newRow["LRMK_ID"] = comboBox2.Text;
                         newRow["Grade"] = gradeTxt.Text;
-                        newRow["Series"] = "";
+                        newRow["Series"] = series;
                         newRow["Name"] = umdName.Text;
                         newRow["MPCN"] = mpcn_Txt.Text;
 
@@ -614,7 +619,7 @@ namespace AutoTracker
                     newRow["PROG_ID"] = reqProgID;
                     newRow["LRMK_ID"] = comboBox2.Text;
                     newRow["Grade"] = gradeTxt.Text;
-                    newRow["Series"] = "";
+                    newRow["Series"] = series;
                     newRow["Name"] = umdName.Text;
                     newRow["MPCN"] = mpcn_Txt.Text;
 
@@ -1093,7 +1098,7 @@ namespace AutoTracker
             else
                 dtParser = dt_Exec;
 
-            if (dtParser.Rows.Count > MAX_UMD_PER_SLIDE)
+            if (dtParser.Rows.Count > MAX_ROWS_PER_SLIDE)
             {
                 while (itr < dtParser.Rows.Count)
                 {
@@ -1377,13 +1382,40 @@ namespace AutoTracker
             int y = 270;
             int w = 150;
             int h = 50;
+            
+            int count = 0, row_no = 0;
+            
+            bool first_iteration = true;
 
             string s1, s2, s3;
-
-            string tempCompare;
-
+            
+            string seriesCompare = dt.Rows[0].ItemArray[5].ToString();
+            
             for (; itr < dt.Rows.Count; itr++)
             {
+                if (seriesCompare != dt.Rows[itr].ItemArray[5].ToString() || first_iteration == true)
+                {
+                    y = 275;
+                    
+                    var objLabel = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                    
+                    seriesCompare = dt.Rows[itr].ItemArray[5].ToString();
+                    
+                    objLabel.TextFrame.TextRange.Font.Size = 18;
+                    objLabel.TextFrame.TextRange.Text = "SERIES\n" + seriesCompare;
+                    objLabel.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+                    objLabel.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGray);
+                    objLabel.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Size = 11;
+                    objLabel.Line.DashStyle = MsoLineDashStyle.msoLineLongDash;
+                    objLabel.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphicAlignment.ppAlignCenter;
+                    objLabel.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+                    
+                    y += 60;
+                    
+                    first_iteration = false;
+                    count = 0;
+                }
+                
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
                 s1 = dt.Rows[itr].ItemArray[0].ToString();
                 s2 = dt.Rows[itr].ItemArray[1].ToString();
@@ -1404,15 +1436,26 @@ namespace AutoTracker
                 objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
                 objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
 
-                x += 170;
+                y += 60;
+                count++;
 
-                if (x > 730)
+                if (seriesCompare == dt.Rows[itr].ItemArray[5].ToString() && (count % 3) == 0)
                 {
-                    x = 50;
-                    y += 60;
+                    x += 170;
+                    y = 335;
+                    row_no++;
                 }
-
-                if (((itr + 1) % MAX_UMD_PER_SLIDE == 0) && itr > 0)
+                
+                if (itr + 1 < dt.Rows.Count)
+                {
+                    if (seriesCompare != dt.Rows[itr + 1].ItemArray[5].ToString() && (count % 3) != 0)
+                    {
+                        row_no++;
+                        x += 170;
+                    }
+                }
+                
+                if (row_no >= (MAX_ROWS_PER_SLIDE) && itr > 0)
                 {
                     itr++;
                     break;
@@ -1426,11 +1469,40 @@ namespace AutoTracker
             int y = 100;
             int w = 150;
             int h = 50;
+            
+            int count = 0, row_no = 0;
+            
+            bool first_iteration = true;
 
             string s1, s2, s3, s4;
+            
+            string seriesCompare = dt.Rows[0].ItemArray[6].ToString();
 
             for (; itr < dt.Rows.Count; itr++)
             {
+                if (seriesCompare != dt.Rows[itr].ItemArray[6].ToString() || first_iteration == true)
+                {
+                    y = 100;
+                    
+                    var objLabel = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                    
+                    seriesCompare = dt.Rows[itr].ItemArray[6].ToString();
+                    
+                    objLabel.TextFrame.TextRange.Font.Size = 18;
+                    objLabel.TextFrame.TextRange.Text = "SERIES\n" + seriesCompare;
+                    objLabel.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+                    objLabel.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGray);
+                    objLabel.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Size = 11;
+                    objLabel.Line.DashStyle = MsoLineDashStyle.msoLineLongDash;
+                    objLabel.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphicAlignment.ppAlignCenter;
+                    objLabel.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+                    
+                    y += 50;
+                    
+                    first_iteration = false;
+                    count = 0;
+                }
+                
                 var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
                 s1 = dt.Rows[itr].ItemArray[0].ToString();
                 s2 = dt.Rows[itr].ItemArray[1].ToString();
@@ -1458,15 +1530,26 @@ namespace AutoTracker
                 objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
                 objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
 
-                x += 170;
+                y += 80;
+                count++;
 
-                if (x > 630)
+                if (seriesCompare == dt.Rows[itr].ItemArray[6].ToString() && (count % 5) == 0)
                 {
-                    x = 50;
-                    y += 80;
+                    x += 170;
+                    y = 150;
+                    row_no++;
                 }
-
-                if (((itr + 1) % MAX_UMD_PER_SLIDE == 0) && itr > 0)
+                
+                if (itr + 1 < dt.Rows.Count)
+                {
+                    if (seriesCompare != dt.Rows[itr + 1].ItemArray[6].ToString() && (count % 5) != 0)
+                    {
+                        row_no++;
+                        x += 170;
+                    }
+                }
+                
+                if (row_no >= (MAX_ROWS_PER_SLIDE - 1) && itr > 0)
                 {
                     itr++;
                     break;
