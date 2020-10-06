@@ -1081,6 +1081,9 @@ namespace AutoTracker
             slides.AddSlide(cur_slide, customLayout);
 
             CreateSlide(slides, ref cur_slide, dt, dt_UMD, dt_Exec, false, customLayout);
+            slides.AddSlide(cur_slide, customLayout);
+            
+            CreateOverallSlide(slides, ref cur_slide, dt_Exec, customLayout);
 
             slides[cur_slide].Delete();
         }
@@ -1163,6 +1166,49 @@ namespace AutoTracker
                 //Notes on PowerPoint - Second Slide
                 slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Executed Table";
             }
+        }
+        
+        private void CreateOverallSlide(PowerPoint.Slides slides, ref int cur_slide, DataTable dt_Exec, PowerPoint.CustomLayout customLayout)
+        {
+            int itr = 0;
+            
+            if (dt_Exec.Rows.Count > MAX_ROWS_PER_SLIDE)
+            {
+                while (itr < dt_Exec.Rows.Count)
+                {
+                    SetupOverall(slides, cur_slide, dt_Exec, ref itr);
+                    
+                    if (itr < dt_Exec.Rows.Count)
+                    {
+                        cur_slide++;
+                        slides.AddSlide(cur_slide, customLayout);
+                        slides[cur_slide].ApplyTemplate(@templateLocation);
+                    }
+                }
+            }
+            else
+                SetupOverall(slides, cur_slide, dt_Exec, ref itr);
+                
+            cur_slide++;
+        }
+        
+        private void SetupOverall(PowerPoint.Slides slides, int slide_num, DataTable dt_Exec, ref int itr)
+        {
+            //Add Title and customize Overall Slide
+            slides[slide_num].ApplyTemplate(@templateLocation);
+            AddPPHeader(slides[slide_num], " (Overall)");
+            
+            //Create Overall Table
+            if (dataGridView3.RowCount != 0)
+                SetUpOverallPPTable(slides[slide_num], ref itr, dt_Exec);
+                
+            //Setup CIV/MILITARY Legend
+            SetUpPPLegend(slides[slide_num], 450, 3);
+            
+            slides[slide_num].Shapes.Placeholders[2].Delete();
+            
+            //Notes on PowerPoint - Third type of Slide
+            slides[slide_num].NotesPage.Shapes[2].TextFrame.TextRange.Text = "Overall Executed Table";
         }
 
         private void AddPPHeader(PowerPoint._Slide slide, string add)
@@ -1530,7 +1576,11 @@ namespace AutoTracker
                 objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
                 objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
 
-                y += 80;
+                y += 60;
+                
+                if (s4.Length > 30)
+                    y +=13;
+                
                 count++;
 
                 if (seriesCompare == dt.Rows[itr].ItemArray[6].ToString() && (count % 5) == 0)
@@ -1550,6 +1600,93 @@ namespace AutoTracker
                 }
                 
                 if (row_no >= (MAX_ROWS_PER_SLIDE - 1) && itr > 0)
+                {
+                    itr++;
+                    break;
+                }
+            }
+        }
+        
+        private void SetUpOverallPPTable(PowerPoint._Slide slide, ref int itr, DataTable dt)
+        {
+            int x = 30, y = 100, w = 90, h = 45;
+            int count = 0, row_no = 0;
+            bool first_iteration = true;
+            string s1;
+            string seriesCompare = dt.Rows[0].ItemArray[6].ToString();
+            
+            for (; itr < dt.Rows.Count; itr++)
+            {
+                if (seriesCompare != dt.Rows[itr].ItemArray[6].ToString() || first_iteration == true)
+                {
+                    y = 100;
+                    
+                    var objLabel = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                    
+                    seriesCompare = dt.Rows[itr].ItemArray[6].ToString();
+                    
+                    objLabel.TextFrame.TextRange.Font.Size = 11;
+                    objLabel.TextFrame.TextRange.Text = "SERIES\n" + seriesCompare;
+                    objLabel.TextFrame.TextRange.Font.Bold = MsoTriState.msoTrue;
+                    objLabel.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGray);
+                    objLabel.TextFrame.TextRange.Paragraphs(1).Lines(1).Font.Size = 8;
+                    objLabel.Line.DashStyle = MsoLineDashStyle.msoLineLongDash;
+                    objLabel.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphicAlignment.ppAlignCenter;
+                    objLabel.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+                    
+                    y += 34;
+                    
+                    first_iteration = false;
+                    count = 0;
+                }
+                
+                var objRectangle = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
+                s1 = dt.Rows[itr].ItemArray[1].ToString();
+
+                objRectangle.TextFrame.TextRange.Font.Size = 1;
+                objRectangle.TextFrame.TextRange.Text = s1;
+
+                if (dt.Rows[itr].ItemArray[0].ToString().Contains("GS") || dt.Rows[itr].ItemArray[0].ToString().Contains("NH"))
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGreen);
+                else
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.White);
+
+                if (!dt.Rows[itr].ItemArray[5].ToString().Contains(comboBox2.Text))
+                {
+                    objRectangle.Line.DashStyle = MsoLineDashStyle.msoLineDash;
+                    objRectangle.Fill.ForeColor.RGB = ColorTranslator.ToOle(Color.LightGoldenrodYellow);
+                }
+
+                objRectangle.TextFrame.TextRange.Font.Name = "Arial Narrow";
+                objRectangle.TextFrame.TextRange.Paragraphs(1).Lines(1, 2).Font.Bold = MsoTriState.msoTrue;
+                objRectangle.TextFrame.TextRange.Font.Size = 8;
+                objRectangle.TextFrame.TextRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.PowerPoint.PpParagraphAlignment.ppAlignCenter;
+                objRectangle.TextFrame2.AutoSize = MsoAutoSize.msoAutoSizeShapeToFitText;
+
+                y += 20;
+                
+                if (s1.Length > 18)
+                    y +=10;
+                
+                count++;
+
+                if (seriesCompare == dt.Rows[itr].ItemArray[6].ToString() && (count % 20) == 0)
+                {
+                    x += 95;
+                    y = 134;
+                    row_no++;
+                }
+                
+                if (itr + 1 < dt.Rows.Count)
+                {
+                    if (seriesCompare != dt.Rows[itr + 1].ItemArray[6].ToString() && (count % 20) != 0)
+                    {
+                        row_no++;
+                        x += 95;
+                    }
+                }
+                
+                if (row_no >= (MAX_ROWS_PER_SLIDE + 4) && itr > 0)
                 {
                     itr++;
                     break;
