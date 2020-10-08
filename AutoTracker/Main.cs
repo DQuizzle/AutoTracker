@@ -1614,16 +1614,22 @@ namespace AutoTracker
             bool first_iteration = true;
             string s1;
             string seriesCompare = dt.Rows[0].ItemArray[6].ToString();
+            List<string> seriesName = new List<string>();
+            List<int> seriesCount = new List<int>();
             
             for (; itr < dt.Rows.Count; itr++)
             {
                 if (seriesCompare != dt.Rows[itr].ItemArray[6].ToString() || first_iteration == true)
                 {
+                    if (count != 0)
+                        seriesCount.Add(count);
+                        
                     y = 100;
                     
                     var objLabel = slide.Shapes.AddShape(MsoAutoShapeType.msoShapeRectangle, x, y, w, h);
                     
                     seriesCompare = dt.Rows[itr].ItemArray[6].ToString();
+                    seriesName.Add(seriesCompare);
                     
                     objLabel.TextFrame.TextRange.Font.Size = 11;
                     objLabel.TextFrame.TextRange.Text = "SERIES\n" + seriesCompare;
@@ -1691,6 +1697,25 @@ namespace AutoTracker
                     itr++;
                     break;
                 }
+            }
+            
+            seriesCount.Add(count);
+            
+            int x2 = 850, y2 = 300, w2 = 50, h2 = 25;
+            
+            for (int j = 0; j < seriesName.Count; j++)
+            {
+                int result
+                var objText = slide.Shapes.AddLabel(MsoTextOrientation.msoTextOrientationHorizontal, x2, y2, w2, h2);
+                
+                objText.TextFrame.TextRange.Font.Size = 10;
+                
+                if (int.TryParse(seriesName[j], out result))
+                    objText.TextFrame.TextRange.Text = "Series " + seriesName[j] + ":\t" + seriesCount[j];
+                else
+                    objText.TextFrame.TextRange.Text = "Series " + seriesName[j] + ": " + seriesCount[j];
+                    
+                y2 += 10
             }
         }
 
